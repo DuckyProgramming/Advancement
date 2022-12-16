@@ -1,0 +1,72 @@
+class troop extends physical{
+    constructor(layer,x,y,type,direction,team,control){
+        super(layer,x,y,0,30,90)
+        this.type=type
+        this.direction=direction
+        this.team=team
+        this.control=control
+        this.offset={position:{x:0,y:0}}
+        this.trigger={physics:{resistance:true,friction:true}}
+        this.recoil={timer:[],value:[]}
+		this.timers=[]
+        this.scale=1
+
+        this.life=types.troop[this.type].life
+        this.speed=types.troop[this.type].speed
+        this.size=types.troop[this.type].size
+    }
+    display(){
+        this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.y)
+        this.layer.rotate(this.direction)
+        this.layer.scale(this.scale)
+        if(this.fade>0&&this.size>0){
+            this.layer.noStroke()
+            switch(this.type){
+                case 0:
+                    this.layer.fill(60,this.fade)
+                    this.layer.rect(8,-22+this.recoil.value[0],6,12)
+                break
+            }
+            this.layer.noStroke()
+            this.layer.fill(230,210,140,this.fade)
+            this.layer.ellipse(0,0,40,40)
+            this.layer.fill(0,this.fade)
+            this.layer.ellipse(-8,-6,6,6)
+            this.layer.ellipse(8,-6,6,6)
+        }
+        this.layer.scale(1/this.scale)
+        this.layer.rotate(-this.direction)
+        this.layer.translate(-this.position.x-this.offset.position.x,-this.position.y-this.offset.position.y)
+    }
+    update(){
+        super.update()
+        if(this.trigger.physics.resistance){
+			this.velocity.x*=(1-physics.resistance)
+            this.velocity.y*=(1-physics.resistance)
+		}
+		for(let a=0,la=this.timers.length;a<la;a++){
+			if(this.timers[a]>0){
+				this.timers[a]--
+			}
+		}
+        switch(this.control){
+            case 0:
+                this.direction=atan2(inputs.rel.x-this.layer.width/2,this.layer.height/2-inputs.rel.y)
+                if(inputs.keys[0][0]||inputs.keys[1][0]){
+                    this.velocity.x-=this.speed/10
+                }
+                if(inputs.keys[0][1]||inputs.keys[1][1]){
+                    this.velocity.x+=this.speed/10
+                }
+                if(inputs.keys[0][2]||inputs.keys[1][2]){
+                    this.velocity.y-=this.speed/10
+                }
+                if(inputs.keys[0][3]||inputs.keys[1][3]){
+                    this.velocity.y+=this.speed/10
+                }
+            break
+        }
+        stage.focus.x=this.position.x
+        stage.focus.y=this.position.y
+    }
+}
