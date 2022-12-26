@@ -1,8 +1,9 @@
 class projectile extends entity{
-    constructor(layer,x,y,type,direction,team){
+    constructor(layer,x,y,type,direction,team,color){
         super(layer,x,y,type,0)
         this.direction=direction
         this.team=team
+        this.color=color
         this.scale=1
         this.damage=types.projectile[this.type].damage
         this.speed=types.projectile[this.type].speed
@@ -13,13 +14,18 @@ class projectile extends entity{
         if(this.fade>0&&this.size>0&&this.scale>0){
             this.layer.translate(this.position.x,this.position.y)
             this.layer.rotate(this.direction)
-            this.layer.scale(this.size*this.scale)
+            this.layer.scale(this.size*this.scale/10)
             switch(this.image){
                 case 1:
-                    
+                    this.layer.stroke(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
+                    this.layer.strokeWeight(4)
+                    this.layer.line(0,-15,0,15)
+                    this.layer.stroke(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
+                    this.layer.strokeWeight(2)
+                    this.layer.line(0,-12,0,12)
                 break
             }
-            this.layer.scale(1/this.size/this.scale)
+            this.layer.scale(1/this.size/this.scale/10)
             this.layer.rotate(-this.direction)
             this.layer.translate(-this.position.x,-this.position.y)
         }

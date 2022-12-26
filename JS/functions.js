@@ -60,6 +60,15 @@ function pushPoint(point,origin,size){
 		return {x:origin.x+sin(atan2(point.x-origin.x,point.y-origin.y))*size,y:origin.y+cos(atan2(point.x-origin.x,point.y-origin.y))*size}
 	}
 }
+function directionValue(start,target,bound){
+	if(abs(target-start)<bound||abs(target-start-360)<bound||abs(target-start+360)<bound||abs(target-start-720)<bound||abs(target-start+720)<bound){
+		return 0
+	}else if(start>target-180&&start<target||start>target-540&&start<target-360||start>target+180&&start<target+360||start>target-900&&start<target-720||start>target+540&&start<target+720){
+		return 1
+	}else if(start>target&&start<target+180||start>target-360&&start<target-180||start>target+360&&start<target+540||start>target-720&&start<target-540||start>target+720&&start<target+900){
+		return 2
+	}
+}
 function circleInsideBox(box,circle){
 	if(dist(circle.position.x,circle.position.y,constrain(circle.position.x,box.position.x-box.width/2,box.position.x+box.width/2),constrain(circle.position.y,box.position.y-box.height/2,box.position.y+box.height/2))<circle.size){
 		return true
@@ -148,6 +157,8 @@ function generateWorld(layer,level){
 					entities.walls.push(new wall(layer,b*game.tileSize+floor((level[a][b]%100)/10)*game.tileSize/2+game.tileSize/2,a*game.tileSize+(level[a][b]%10)*game.tileSize/2+game.tileSize/2,floor(level[a][b]/100),floor((level[a][b]%100)/10)*game.tileSize+game.tileSize,(level[a][b]%10)*game.tileSize+game.tileSize))
 				}else if(level[a][b]==-1){
 					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].player.type,missions[game.mission].player.body,missions[game.mission].player.direction,missions[game.mission].player.team,0))
+				}else if(level[a][b]==-2){
+					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].partner.type,missions[game.mission].partner.body,missions[game.mission].partner.direction,missions[game.mission].partner.team,1))
 				}
 			}
 		}

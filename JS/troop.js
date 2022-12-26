@@ -14,10 +14,12 @@ class troop extends physical{
 
         this.life=types.troop[this.type].life
         this.speed=types.troop[this.type].speed
+        this.turnSpeed=types.troop[this.type].turnSpeed
         this.size=types.troop[this.type].size
 
         this.base={life:this.life}
         this.collect={life:this.life}
+        this.goal={direction:this.direction}
     }
     display(){
         if(this.fade>0&&this.size>0&&this.scale>0){
@@ -93,9 +95,26 @@ class troop extends physical{
 				this.timers[a]--
 			}
 		}
+        if(this.direction>180){
+            this.direction-=360
+        }else if(this.direction<-180){
+            this.direction+=360
+        }
+        if(this.goal.direction>180){
+            this.goal.direction-=360
+        }else if(this.goal.direction<-180){
+            this.goal.direction+=360
+        }
+        if(directionValue(this.direction,this.goal.direction,this.speed)==0){
+            this.direction=this.goal.direction
+        }else if(directionValue(this.direction,this.goal.direction,this.speed)==1){
+            this.direction+=this.speed
+        }else if(directionValue(this.direction,this.goal.direction,this.speed)==2){
+            this.direction-=this.speed
+        }
         switch(this.control){
             case 0:
-                this.direction=atan2(inputs.rel.x-this.layer.width/2,this.layer.height/2-inputs.rel.y)
+                this.goal.direction=atan2(inputs.rel.x-this.layer.width/2,this.layer.height/2-inputs.rel.y)
                 if(inputs.keys[0][0]||inputs.keys[1][0]){
                     this.velocity.x-=this.speed/10
                 }
@@ -108,9 +127,9 @@ class troop extends physical{
                 if(inputs.keys[0][3]||inputs.keys[1][3]){
                     this.velocity.y+=this.speed/10
                 }
+                stage.focus.x=this.position.x
+                stage.focus.y=this.position.y
             break
         }
-        stage.focus.x=this.position.x
-        stage.focus.y=this.position.y
     }
 }

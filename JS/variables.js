@@ -8,11 +8,20 @@ types={
     ],troop:[
         {
             name:'Unarmed',
-            life:100,speed:3,size:15,
+            life:100,speed:3,size:15,turnSpeed:10,
             reload:0,
             set:{loop:0},
+        },{
+            name:'Pistol',
+            life:120,speed:2,size:15,turnSpeed:6,
+            reload:30,
+            set:{loop:1},
         },
-    ],
+    ],team:[
+        {
+            color:[[50,255,50],[100,255,100]],
+        },
+    ]
 }
 stage={scale:0,focus:{x:0,y:0,scale:0},scene:'level',background:0}
 game={level:0,zone:0,mission:0,edge:{x:0,y:0},tileSize:40}
