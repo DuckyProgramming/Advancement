@@ -152,5 +152,5 @@ function generateWorld(layer,level){
 			}
 		}
 	}
-	run={fore:[entities.walls,entities.troops]}
+	run={fore:[entities.walls,entities.troops],info:[entities.troops]}
 }

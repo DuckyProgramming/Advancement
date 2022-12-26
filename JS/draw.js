@@ -24,6 +24,11 @@ function draw(){
 					}
 				}
 			}
+			for(let a=0,la=run.info.length;a<la;a++){
+				for(let b=0,lb=run.info[a].length;b<lb;b++){
+					run.info[a][b].displayInfo()
+				}
+			}
 		break
 	}
 	graphics.main.pop()

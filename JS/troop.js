@@ -15,12 +15,15 @@ class troop extends physical{
         this.life=types.troop[this.type].life
         this.speed=types.troop[this.type].speed
         this.size=types.troop[this.type].size
+
+        this.base={life:this.life}
+        this.collect={life:this.life}
     }
     display(){
-        this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.y)
-        this.layer.rotate(this.direction)
-        this.layer.scale(this.scale)
-        if(this.fade>0&&this.size>0){
+        if(this.fade>0&&this.size>0&&this.scale>0){
+            this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.y)
+            this.layer.rotate(this.direction)
+            this.layer.scale(this.scale)
             this.layer.noStroke()
             switch(this.type){
                 case 0:
@@ -51,10 +54,33 @@ class troop extends physical{
                     this.layer.line(4,-21,4,-22)
                 break
             }
+            this.layer.scale(1/this.scale)
+            this.layer.rotate(-this.direction)
+            this.layer.translate(-this.position.x-this.offset.position.x,-this.position.y-this.offset.position.y)
         }
-        this.layer.scale(1/this.scale)
-        this.layer.rotate(-this.direction)
-        this.layer.translate(-this.position.x-this.offset.position.x,-this.position.y-this.offset.position.y)
+    }
+    displayInfo(){
+        this.layer.translate(this.position.x,this.position.y)
+		this.layer.noStroke()
+		this.layer.fill(0,this.fade)
+		this.layer.rect(0,this.size+20,52,10,4)
+		this.layer.fill(150,this.fade)
+		this.layer.rect(0,this.size+20,50,8,3)
+		if(this.collect.life>=this.life){
+			this.layer.fill(240,0,0,this.fade)
+			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,6),3)
+			this.layer.fill(min(255,510-max(0,this.life)/this.base.life*510)-max(0,5-max(0,this.life)/this.base.life*30)*25,max(0,this.life)/this.base.life*510,0,this.fade)
+			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,6),3)
+		}else if(this.collect.life<this.life){
+			this.layer.fill(240,0,0,this.fade)
+			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,6),3)
+			this.layer.fill(min(255,510-max(0,this.collect.life)/this.base.life*510)-max(0,5-max(0,this.collect.life)/this.base.life*30)*25,max(0,this.collect.life)/this.base.life*510,0,this.fade)
+			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,6),3)
+		}
+		this.layer.fill(0,this.fade)
+		this.layer.textSize(8)
+		this.layer.text(max(0,ceil(this.life*10)/10)+"/"+max(0,ceil(this.base.life)),0,this.size+21)
+        this.layer.translate(-this.position.x,-this.position.y)
     }
     update(){
         super.update()
