@@ -9,17 +9,30 @@ class troop extends physical{
         this.offset={position:{x:0,y:0}}
         this.trigger={physics:{resistance:true,friction:true}}
         this.recoil={timer:[],value:[]}
+        this.counter={fire:0}
 		this.timers=[]
         this.scale=1
+        this.firing=false
 
         this.life=types.troop[this.type].life
         this.speed=types.troop[this.type].speed
         this.turnSpeed=types.troop[this.type].turnSpeed
         this.size=types.troop[this.type].size
 
-        this.base={life:this.life}
+        this.reload=types.troop[this.type].reload
+        this.projectile=types.troop[this.type].projectile
+        this.spawn=types.troop[this.type].spawn
+
+        this.recoilSet=types.troop[this.type].recoil
+
+        this.base={life:this.life,reload:this.reload}
         this.collect={life:this.life}
         this.goal={direction:this.direction}
+
+        for(a=0;a<this.recoilSet.loop;a++){
+            this.recoil.timer.push(0)
+            this.recoil.value.push(0)
+        }
     }
     display(){
         if(this.fade>0&&this.size>0&&this.scale>0){
@@ -28,9 +41,9 @@ class troop extends physical{
             this.layer.scale(this.scale)
             this.layer.noStroke()
             switch(this.type){
-                case 0:
+                case 1:
                     this.layer.fill(60,this.fade)
-                    this.layer.rect(8,-22+this.recoil.value[0],6,12)
+                    this.layer.rect(12,-20+this.recoil.value[0],4,12)
                 break
             }
             this.layer.noStroke()
@@ -105,12 +118,29 @@ class troop extends physical{
         }else if(this.goal.direction<-180){
             this.goal.direction+=360
         }
-        if(directionValue(this.direction,this.goal.direction,this.speed)==0){
+        if(directionValue(this.direction,this.goal.direction,this.turnSpeed)==0){
             this.direction=this.goal.direction
-        }else if(directionValue(this.direction,this.goal.direction,this.speed)==1){
-            this.direction+=this.speed
-        }else if(directionValue(this.direction,this.goal.direction,this.speed)==2){
-            this.direction-=this.speed
+        }else if(directionValue(this.direction,this.goal.direction,this.turnSpeed)==1){
+            this.direction+=this.turnSpeed
+        }else if(directionValue(this.direction,this.goal.direction,this.turnSpeed)==2){
+            this.direction-=this.turnSpeed
+        }
+        for(let a=0,la=this.recoil.timer.length;a<la;a++){
+            if(this.recoil.timer[a]>0){
+                this.recoil.timer[a]--
+                this.recoil.value[a]+=this.recoilSet.speed
+            }else if(this.recoil.value[a]>0){
+                this.recoil.value[a]-=this.recoilSet.return
+            }
+        }
+        if(this.firing&&this.reload<=0&&this.base.reload>0){
+            this.reload=this.base.reload
+            this.recoil.timer[this.counter.fire%this.recoilSet.loop]=this.recoilSet.anim
+            this.counter.fire++
+            entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.spawn.x-sin(this.direction)*this.spawn.y,this.position.y+cos(this.direction)*this.spawn.y+sin(this.direction)*this.spawn.x,this.projectile,this.direction,this.team))
+        }
+        if(this.reload>0){
+            this.reload--
         }
         switch(this.control){
             case 0:
@@ -129,6 +159,7 @@ class troop extends physical{
                 }
                 stage.focus.x=this.position.x
                 stage.focus.y=this.position.y
+                this.firing=mouseIsPressed
             break
         }
     }

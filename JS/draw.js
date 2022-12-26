@@ -7,7 +7,7 @@ function draw(){
 		case 'level':
 			switch(stage.background){
 				case 0:
-					graphics.main.background(50)
+					graphics.main.background(150)
 				break
 			}
 			graphics.main.translate(-stage.focus.x,-stage.focus.y)
@@ -15,8 +15,8 @@ function draw(){
 			graphics.main.translate(graphics.main.width/2,graphics.main.height/2)
 			for(let a=0,la=run.fore.length;a<la;a++){
 				for(let b=0,lb=run.fore[a].length;b<lb;b++){
-					run.fore[a][b].display()
 					run.fore[a][b].update()
+					run.fore[a][b].display()
 					if(run.fore[a][b].remove){
 						run.fore[a].splice(b,1)
 						b--

@@ -2,20 +2,20 @@ types={
     projectile:[
         {
             name:'Beam',
-            damage:5,speed:6,size:6,
+            damage:5,speed:10,size:3,
             image:1,
         },
     ],troop:[
         {
             name:'Unarmed',
             life:100,speed:3,size:15,turnSpeed:10,
-            reload:0,
-            set:{loop:0},
+            reload:0,projectile:0,spawn:{x:0,y:0},
+            recoil:{loop:0,anim:0,speed:0,return:0},
         },{
             name:'Pistol',
             life:120,speed:2,size:15,turnSpeed:6,
-            reload:30,
-            set:{loop:1},
+            reload:30,projectile:0,spawn:{x:12,y:-20},
+            recoil:{loop:1,anim:3,speed:1,return:0.2},
         },
     ],team:[
         {
@@ -29,7 +29,7 @@ physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene}
 inputs={mouse:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false]]}
-entities={walls:[],troops:[]}
+entities={projectiles:[],walls:[],troops:[]}
 collision={incident:{x:0,y:0},calculate:{x:0,y:0}}
 run={fore:[],info:[]}
 a=0;b=0;c=0;d=0;_=0

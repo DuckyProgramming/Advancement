@@ -1,14 +1,14 @@
 class projectile extends entity{
-    constructor(layer,x,y,type,direction,team,color){
+    constructor(layer,x,y,type,direction,team){
         super(layer,x,y,type,0)
         this.direction=direction
         this.team=team
-        this.color=color
-        this.scale=1
+        this.scale=0
         this.damage=types.projectile[this.type].damage
         this.speed=types.projectile[this.type].speed
         this.size=types.projectile[this.type].size
         this.image=types.projectile[this.type].image
+        this.color=types.team[this.team].color
     }
     display(){
         if(this.fade>0&&this.size>0&&this.scale>0){
@@ -18,21 +18,29 @@ class projectile extends entity{
             switch(this.image){
                 case 1:
                     this.layer.stroke(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
-                    this.layer.strokeWeight(4)
-                    this.layer.line(0,-15,0,15)
+                    this.layer.strokeWeight(8)
+                    this.layer.line(0,-40,0,40)
                     this.layer.stroke(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
-                    this.layer.strokeWeight(2)
-                    this.layer.line(0,-12,0,12)
+                    this.layer.strokeWeight(6)
+                    this.layer.line(0,-30,0,30)
                 break
             }
-            this.layer.scale(1/this.size/this.scale/10)
+            this.layer.scale(10/this.size/this.scale)
             this.layer.rotate(-this.direction)
             this.layer.translate(-this.position.x,-this.position.y)
         }
     }
     update(){
+        super.update()
+        if(this.used){
+            this.status=1
+            this.speed=0
+            if(this.fade<=0){
+                this.remove=true
+            }
+        }
         this.position.x+=sin(this.direction)*this.speed
-        this.position.y+=cos(this.direction)*this.speed
+        this.position.y-=cos(this.direction)*this.speed
         if(this.scale<1){
             this.scale=round(this.scale*5+1)/5
         }
