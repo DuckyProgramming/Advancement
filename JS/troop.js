@@ -1,7 +1,8 @@
 class troop extends physical{
-    constructor(layer,x,y,type,direction,team,control){
+    constructor(layer,x,y,type,body,direction,team,control){
         super(layer,x,y,0,30,90)
         this.type=type
+        this.body=body
         this.direction=direction
         this.team=team
         this.control=control
@@ -28,11 +29,28 @@ class troop extends physical{
                 break
             }
             this.layer.noStroke()
-            this.layer.fill(230,210,140,this.fade)
-            this.layer.ellipse(0,0,40,40)
-            this.layer.fill(0,this.fade)
-            this.layer.ellipse(-8,-6,6,6)
-            this.layer.ellipse(8,-6,6,6)
+            switch(this.body){
+                case 0:
+                    this.layer.fill(230,210,140,this.fade)
+                    this.layer.ellipse(0,0,40,40)
+                    this.layer.fill(0,this.fade)
+                    this.layer.ellipse(-8,-9,6,6)
+                    this.layer.ellipse(8,-9,6,6)
+                break
+                case 1:
+                    this.layer.fill(255,145,25,this.fade)
+                    this.layer.ellipse(0,-18,24,16)
+                    this.layer.fill(255,235,35,this.fade)
+                    this.layer.ellipse(0,0,40,40)
+                    this.layer.fill(0,this.fade)
+                    this.layer.ellipse(-8,-9,6,6)
+                    this.layer.ellipse(8,-9,6,6)
+                    this.layer.stroke(0,this.fade)
+                    this.layer.strokeWeight(1)
+                    this.layer.line(-4,-21,-4,-22)
+                    this.layer.line(4,-21,4,-22)
+                break
+            }
         }
         this.layer.scale(1/this.scale)
         this.layer.rotate(-this.direction)

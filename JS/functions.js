@@ -147,7 +147,7 @@ function generateWorld(layer,level){
 				if(level[a][b]>=100){
 					entities.walls.push(new wall(layer,b*game.tileSize+floor((level[a][b]%100)/10)*game.tileSize/2+game.tileSize/2,a*game.tileSize+(level[a][b]%10)*game.tileSize/2+game.tileSize/2,floor(level[a][b]/100),floor((level[a][b]%100)/10)*game.tileSize+game.tileSize,(level[a][b]%10)*game.tileSize+game.tileSize))
 				}else if(level[a][b]==-1){
-					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].player.type,missions[game.mission].player.direction,missions[game.mission].player.team,0))
+					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].player.type,missions[game.mission].player.body,missions[game.mission].player.direction,missions[game.mission].player.team,0))
 				}
 			}
 		}
