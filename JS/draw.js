@@ -29,6 +29,7 @@ function draw(){
 					run.info[a][b].displayInfo()
 				}
 			}
+			progression(stage.mission)
 		break
 	}
 	graphics.main.pop()

@@ -41,7 +41,7 @@ function keyPressed(){
 		break
 	}
 }
-	function keyReleased(){
+function keyReleased(){
 	switch(key){
 		case 'a':
 			inputs.keys[0][0]=false

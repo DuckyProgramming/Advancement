@@ -175,6 +175,21 @@ function generateWorld(layer,level){
 				}
 			}
 		}
+		for(let a=0,la=missions[game.mission].other.length;a<la;a++){
+			calc.int[0]=0
+			calc.int[1]=0
+			for(let b=0,lb=missions[game.mission].other[a].group.length;b<lb;b++){
+				for(let c=0,lc=missions[game.mission].other[a].group[b].number;c<lc;c++){
+					calc.int[0]++
+				}
+			}
+			for(let b=0,lb=missions[game.mission].other[a].group.length;b<lb;b++){
+				for(let c=0,lc=missions[game.mission].other[a].group[b].number;c<lc;c++){
+					entities.troops.push(new troop(layer,missions[game.mission].other[a].position.x+sin(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].position.y+cos(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].group[b].type,missions[game.mission].other[a].group[b].body,missions[game.mission].other[a].group[b].direction,missions[game.mission].other[a].group[b].team,2))
+					calc.int[1]++
+				}
+			}
+		}
 	}
 	run={fore:[entities.projectiles,entities.walls,entities.troops],info:[entities.troops]}
 }

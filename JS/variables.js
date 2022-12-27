@@ -9,17 +9,19 @@ types={
         {
             name:'Unarmed',
             life:100,speed:3,size:15,turnSpeed:10,
-            reload:0,projectile:0,spawn:{x:0,y:0},
+            reload:0,projectile:0,spread:0,spawn:{x:0,y:0},
             recoil:{loop:0,anim:0,speed:0,return:0},
         },{
             name:'Pistol',
             life:120,speed:2,size:15,turnSpeed:6,
-            reload:30,projectile:0,spawn:{x:12,y:-20},
+            reload:30,projectile:0,spread:5,spawn:{x:12,y:-20},
             recoil:{loop:1,anim:3,speed:1,return:0.2},
         },
     ],team:[
         {
             color:[[50,255,50],[100,255,100]],
+        },{
+            color:[[50,50,255],[100,100,255]],
         },
     ]
 }

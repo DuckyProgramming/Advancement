@@ -8,10 +8,11 @@ class troop extends physical{
         this.control=control
         this.name=name
         this.offset={position:{x:0,y:0}}
-        this.trigger={physics:{resistance:true,friction:true}}
+        this.trigger={physics:{resistance:true,friction:true},movement:{active:false}}
         this.recoil={timer:[],value:[]}
         this.counter={fire:0}
         this.hold={int:[random(0,100)]}
+        this.tick=[0,0,0,0]
 		this.timers=[]
         this.scale=1
         this.firing=false
@@ -23,6 +24,7 @@ class troop extends physical{
 
         this.reload=types.troop[this.type].reload
         this.projectile=types.troop[this.type].projectile
+        this.spread=types.troop[this.type].spread
         this.spawn=types.troop[this.type].spawn
 
         this.recoilSet=types.troop[this.type].recoil
@@ -140,7 +142,7 @@ class troop extends physical{
             this.reload=this.base.reload
             this.recoil.timer[this.counter.fire%this.recoilSet.loop]=this.recoilSet.anim
             this.counter.fire++
-            entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.spawn.x-sin(this.direction)*this.spawn.y,this.position.y+cos(this.direction)*this.spawn.y+sin(this.direction)*this.spawn.x,this.projectile,this.direction,this.team))
+            entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.spawn.x-sin(this.direction)*this.spawn.y,this.position.y+cos(this.direction)*this.spawn.y+sin(this.direction)*this.spawn.x,this.projectile,this.direction+random(-this.spread,this.spread),this.team))
         }
         if(this.reload>0){
             this.reload--
@@ -169,17 +171,56 @@ class troop extends physical{
                 this.goal.position.x=stage.focus.x
                 this.goal.position.y=stage.focus.y
                 this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
-                if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>50+this.hold.int[0]){
-                    if(this.position.x>stage.focus.x+10){
+                for(let a=0,la=this.tick.length;a<la;a++){
+                    if(this.tick[a]==0&&floor(random(0,120))==0){
+                        this.tick[a]=1
+                    }else if(this.tick[a]==1&&floor(random(0,30))==0){
+                        this.tick[a]=0
+                    }
+                }
+                if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>100+this.hold.int[0]){
+                    if(this.position.x>stage.focus.x+10||this.tick[0]==1){
                         this.velocity.x-=this.speed/10
                     }
-                    if(this.position.x<stage.focus.x-10){
+                    if(this.position.x<stage.focus.x-10||this.tick[1]==1){
                         this.velocity.x+=this.speed/10
                     }
-                    if(this.position.y>stage.focus.y+10){
+                    if(this.position.y>stage.focus.y+10||this.tick[2]==1){
                         this.velocity.y-=this.speed/10
                     }
-                    if(this.position.y<stage.focus.y-10){
+                    if(this.position.y<stage.focus.y-10||this.tick[3]==1){
+                        this.velocity.y+=this.speed/10
+                    }
+                }
+            break
+            case 2:
+                this.goal.position.x=stage.focus.x
+                this.goal.position.y=stage.focus.y
+                this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
+                for(let a=0,la=this.tick.length;a<la;a++){
+                    if(this.tick[a]==0&&floor(random(0,120))==0){
+                        this.tick[a]=1
+                    }else if(this.tick[a]==1&&floor(random(0,30))==0){
+                        this.tick[a]=0
+                    }
+                }
+                if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<750){
+                    this.trigger.movement.active=true
+                }
+                if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<450){
+                    this.firing=true
+                }
+                if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>250+this.hold.int[0]&&this.trigger.movement.active){
+                    if(this.position.x>stage.focus.x+10||this.tick[0]==1){
+                        this.velocity.x-=this.speed/10
+                    }
+                    if(this.position.x<stage.focus.x-10||this.tick[1]==1){
+                        this.velocity.x+=this.speed/10
+                    }
+                    if(this.position.y>stage.focus.y+10||this.tick[2]==1){
+                        this.velocity.y-=this.speed/10
+                    }
+                    if(this.position.y<stage.focus.y-10||this.tick[3]==1){
                         this.velocity.y+=this.speed/10
                     }
                 }
