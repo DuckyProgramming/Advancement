@@ -1,15 +1,17 @@
 class troop extends physical{
-    constructor(layer,x,y,type,body,direction,team,control){
+    constructor(layer,x,y,type,body,direction,team,control,name=''){
         super(layer,x,y,0,30,90)
         this.type=type
         this.body=body
         this.direction=direction
         this.team=team
         this.control=control
+        this.name=name
         this.offset={position:{x:0,y:0}}
         this.trigger={physics:{resistance:true,friction:true}}
         this.recoil={timer:[],value:[]}
         this.counter={fire:0}
+        this.hold={int:[random(0,100)]}
 		this.timers=[]
         this.scale=1
         this.firing=false
@@ -27,7 +29,7 @@ class troop extends physical{
 
         this.base={life:this.life,reload:this.reload}
         this.collect={life:this.life}
-        this.goal={direction:this.direction}
+        this.goal={position:{x:this.position.x,y:this.position.y},direction:this.direction}
 
         for(a=0;a<this.recoilSet.loop;a++){
             this.recoil.timer.push(0)
@@ -78,23 +80,24 @@ class troop extends physical{
         this.layer.translate(this.position.x,this.position.y)
 		this.layer.noStroke()
 		this.layer.fill(0,this.fade)
-		this.layer.rect(0,this.size+20,52,10,4)
+		this.layer.rect(0,this.size+20,52,9,4)
 		this.layer.fill(150,this.fade)
-		this.layer.rect(0,this.size+20,50,8,3)
+		this.layer.rect(0,this.size+20,50,7,3)
 		if(this.collect.life>=this.life){
 			this.layer.fill(240,0,0,this.fade)
-			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,6),3)
+			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,5),3)
 			this.layer.fill(min(255,510-max(0,this.life)/this.base.life*510)-max(0,5-max(0,this.life)/this.base.life*30)*25,max(0,this.life)/this.base.life*510,0,this.fade)
-			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,6),3)
+			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,5),3)
 		}else if(this.collect.life<this.life){
 			this.layer.fill(240,0,0,this.fade)
-			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,6),3)
+			this.layer.rect((max(0,this.life)/this.base.life)*25-25,this.size+20,(max(0,this.life)/this.base.life)*50,2+min((max(0,this.life)/this.base.life)*90,5),3)
 			this.layer.fill(min(255,510-max(0,this.collect.life)/this.base.life*510)-max(0,5-max(0,this.collect.life)/this.base.life*30)*25,max(0,this.collect.life)/this.base.life*510,0,this.fade)
-			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,6),3)
+			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,5),3)
 		}
 		this.layer.fill(0,this.fade)
 		this.layer.textSize(8)
 		this.layer.text(max(0,ceil(this.life*10)/10)+"/"+max(0,ceil(this.base.life)),0,this.size+21)
+        this.layer.text(this.name,0,this.size+29)
         this.layer.translate(-this.position.x,-this.position.y)
     }
     update(){
@@ -144,7 +147,7 @@ class troop extends physical{
         }
         switch(this.control){
             case 0:
-                this.goal.direction=atan2(inputs.rel.x-this.layer.width/2,this.layer.height/2-inputs.rel.y)
+                this.goal.direction=atan2(inputs.rel.x-this.position.x,this.position.y-inputs.rel.y)
                 if(inputs.keys[0][0]||inputs.keys[1][0]){
                     this.velocity.x-=this.speed/10
                 }
@@ -159,7 +162,27 @@ class troop extends physical{
                 }
                 stage.focus.x=this.position.x
                 stage.focus.y=this.position.y
+                stage.focus.scale=1
                 this.firing=mouseIsPressed
+            break
+            case 1:
+                this.goal.position.x=stage.focus.x
+                this.goal.position.y=stage.focus.y
+                this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
+                if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>50+this.hold.int[0]){
+                    if(this.position.x>stage.focus.x+10){
+                        this.velocity.x-=this.speed/10
+                    }
+                    if(this.position.x<stage.focus.x-10){
+                        this.velocity.x+=this.speed/10
+                    }
+                    if(this.position.y>stage.focus.y+10){
+                        this.velocity.y-=this.speed/10
+                    }
+                    if(this.position.y<stage.focus.y-10){
+                        this.velocity.y+=this.speed/10
+                    }
+                }
             break
         }
     }

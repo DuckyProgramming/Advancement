@@ -11,7 +11,7 @@ function draw(){
 				break
 			}
 			graphics.main.translate(-stage.focus.x,-stage.focus.y)
-			graphics.main.scale(stage.focus.size*stage.quality)
+			graphics.main.scale(stage.focus.scale*stage.quality)
 			graphics.main.translate(graphics.main.width/2,graphics.main.height/2)
 			for(let a=0,la=run.fore.length;a<la;a++){
 				for(let b=0,lb=run.fore[a].length;b<lb;b++){

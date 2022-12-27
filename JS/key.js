@@ -24,6 +24,21 @@ function keyPressed(){
 		case 'ArrowDown':
 			inputs.keys[1][3]=true
 		break
+		case 'p':
+			if(dev.mark){
+				print(inputs.screen.x,inputs.screen.y)
+			}
+		break
+		case 'o':
+			if(dev.mark){
+				print(inputs.rel.x,inputs.rel.y)
+			}
+		break
+		case 'i':
+			if(dev.mark){
+				print(round((inputs.rel.x-game.tileSize/2)/game.tileSize)*game.tileSize+game.tileSize/2,round((inputs.rel.y-game.tileSize/2)/game.tileSize)*game.tileSize+game.tileSize/2)
+			}
+		break
 	}
 }
 	function keyReleased(){
