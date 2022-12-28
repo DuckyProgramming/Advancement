@@ -2,16 +2,28 @@ types={
     projectile:[
         {
             name:'Beam',
-            damage:25,speed:15,size:4,
+            damage:25,speed:15,size:4,time:120,
+            trigger:{physics:{resistance:false}},
+            splash:{damage:0},
             image:1,
         },{
             name:'Light Beam',
-            damage:15,speed:12,size:3,
+            damage:15,speed:12,size:3,time:120,
+            trigger:{physics:{resistance:false}},
+            splash:{damage:0},
             image:1,
         },{
             name:'Pellet Beam',
-            damage:5,speed:18,size:2,
+            damage:5,speed:18,size:2,time:120,
+            trigger:{physics:{resistance:false}},
+            splash:{damage:0},
             image:2,
+        },{
+            name:'Grenade',
+            damage:100,speed:10,size:5,time:90,
+            trigger:{physics:{resistance:true}},
+            splash:{damage:0},
+            image:3,
         },
     ],troop:[
         {
@@ -52,8 +64,8 @@ types={
             recoil:{loop:0,anim:0,speed:0,return:0},
         },{
             name:'Grenade',
-            reload:[300],projectile:3,spread:10,spawn:{x:-12,y:-6},range:[200,150],speed:0.95,
-            recoil:{loop:1,anim:2,speed:2,return:0.1},
+            reload:[240],projectile:3,spread:10,spawn:{x:-12,y:-6},range:[200,150],speed:0.95,
+            recoil:{loop:1,anim:6,speed:2,return:0.1},
         },
     ],team:[
         {
@@ -71,7 +83,7 @@ game={level:0,zone:0,mission:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSi
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene}
-inputs={mouse:{x:0,y:0},screen:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false]]}
+inputs={press:false,mouse:{x:0,y:0},screen:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false],[false]]}
 entities={projectiles:[],walls:[],troops:[],particles:[]}
 collision={incident:{x:0,y:0},calculate:{x:0,y:0}}
 calc={int:[0,0]}

@@ -41,6 +41,7 @@ class troop extends physical{
         this.secondary.speed=types.secondary[this.secondaryKey].speed
         this.secondary.recoilSet=types.secondary[this.secondaryKey].recoil
 
+        this.color=types.team[this.team].color
         this.life*=types.team[this.team].life
         this.speed*=this.primary.speed*this.secondary.speed*types.team[this.team].speed
         
@@ -63,10 +64,8 @@ class troop extends physical{
             this.layer.rotate(this.direction)
             this.layer.scale(this.scale)
             this.displayBaseLower(this.type)
-            this.layer.scale(-1,1)
-            this.displayWeapon(this.secondary,this.secondaryKey)
-            this.layer.scale(-1,1)
-            this.displayWeapon(this.primary,this.primaryKey)
+            this.displaySecondary(this.secondary,this.secondaryKey)
+            this.displayPrimary(this.primary,this.primaryKey)
             this.layer.noStroke()
             switch(this.body){
                 case 0:
@@ -119,7 +118,7 @@ class troop extends physical{
             break
         }
     }
-    displayWeapon(weapon,key){
+    displayPrimary(weapon,key){
         this.layer.noStroke()
         switch(key){
             case 1:
@@ -137,11 +136,19 @@ class troop extends physical{
                 this.layer.rect(10,-30+weapon.recoil.value[0],3,8)
                 this.layer.rect(14,-30+weapon.recoil.value[1],3,8)
             break
-            case 4:
+        }
+    }
+    displaySecondary(weapon,key){
+        this.layer.noStroke()
+        switch(key){
+            case 1:
                 this.layer.fill(120,this.fade)
                 this.layer.stroke(100,this.fade)
                 this.layer.strokeWeight(3)
-                this.layer.ellipse()
+                this.layer.ellipse(-12,-15+weapon.recoil.value[0],10,10)
+                this.layer.noStroke()
+                this.layer.fill(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
+                this.layer.ellipse(-12,-15+weapon.recoil.value[0],4,4)
             break
         }
     }
@@ -226,10 +233,19 @@ class troop extends physical{
                 this.primary.reload=this.base.primary.reload[this.primary.counter.fire%this.primary.recoilSet.loop]
                 this.primary.recoil.timer[this.primary.counter.fire%this.primary.recoilSet.loop]=this.primary.recoilSet.anim
                 this.primary.counter.fire++
-                entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.primary.spawn.x-sin(this.direction)*this.primary.spawn.y,this.position.y+cos(this.direction)*this.primary.spawn.y+sin(this.direction)*this.primary.spawn.x,this.primary.projectile,this.direction+random(-this.primary.spread,this.primary.spread),this.team))
+                entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.primary.spawn.x-sin(this.direction)*this.primary.spawn.y,this.position.y+cos(this.direction)*this.primary.spawn.y+sin(this.direction)*this.primary.spawn.x,this.primary.projectile,this.direction+random(-this.primary.spread,this.primary.spread),this.team,this.color))
+            }
+            if(this.secondary.firing&&this.secondary.reload<=0&&this.base.secondary.reload[0]>0){
+                this.secondary.reload=this.base.secondary.reload[this.secondary.counter.fire%this.secondary.recoilSet.loop]
+                this.secondary.recoil.timer[this.secondary.counter.fire%this.secondary.recoilSet.loop]=this.secondary.recoilSet.anim
+                this.secondary.counter.fire++
+                entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.secondary.spawn.x-sin(this.direction)*this.secondary.spawn.y,this.position.y+cos(this.direction)*this.secondary.spawn.y+sin(this.direction)*this.secondary.spawn.x,this.secondary.projectile,this.direction+random(-this.secondary.spread,this.secondary.spread),this.team,this.color))
             }
             if(this.primary.reload>0){
                 this.primary.reload--
+            }
+            if(this.secondary.reload>0){
+                this.secondary.reload--
             }
             switch(this.control){
                 case 0:
@@ -254,7 +270,8 @@ class troop extends physical{
                     }else{
                         game.player.alive=false
                     }
-                    this.primary.firing=mouseIsPressed
+                    this.primary.firing=inputs.press
+                    this.secondary.firing=inputs.keys[2][0]
                 break
                 case 1:
                     this.calc.dist=600

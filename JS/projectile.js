@@ -1,14 +1,16 @@
 class projectile extends entity{
-    constructor(layer,x,y,type,direction,team){
+    constructor(layer,x,y,type,direction,team,color){
         super(layer,x,y,type,0)
         this.direction=direction
         this.team=team
+        this.color=color
         this.scale=0
         this.damage=types.projectile[this.type].damage
         this.speed=types.projectile[this.type].speed
         this.size=types.projectile[this.type].size
         this.image=types.projectile[this.type].image
-        this.color=types.team[this.team].color
+        this.trigger=types.projectile[this.type].trigger
+        this.splash=types.projectile[this.type].splash
         this.collide={list:[entities.troops]}
     }
     display(){
@@ -32,6 +34,15 @@ class projectile extends entity{
                     this.layer.fill(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
                     this.layer.ellipse(0,0,20,20)
                 break
+                case 3:
+                    this.layer.fill(120,this.fade)
+                    this.layer.stroke(100,this.fade)
+                    this.layer.strokeWeight(6)
+                    this.layer.ellipse(0,0,20,20)
+                    this.layer.noStroke()
+                    this.layer.fill(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
+                    this.layer.ellipse(0,0,8,8)
+                break
             }
             this.layer.scale(10/this.size/this.scale)
             this.layer.rotate(-this.direction)
@@ -47,6 +58,9 @@ class projectile extends entity{
                 this.remove=true
             }
         }
+        if(this.trigger.physics.resistance){
+            this.speed*=(1-physics.resistance)
+        }
         this.position.x+=sin(this.direction)*this.speed
         this.position.y-=cos(this.direction)*this.speed
         if(this.scale<1){
@@ -56,7 +70,7 @@ class projectile extends entity{
             for(let a=0,la=this.collide.list.length;a<la;a++){
                 for(let b=0,lb=this.collide.list[a].length;b<lb;b++){
                     if(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)<this.size+this.collide.list[a][b].size&&this.collide.list[a][b].life>0&&this.team!=this.collide.list[a][b].team&&!this.used){
-                        this.particle(0)
+                        this.splash(0)
                         this.used=true
                         this.collide.list[a][b].take(this.damage,this.direction)
                     }
@@ -64,10 +78,20 @@ class projectile extends entity{
             }
         }
     }
+    impact(context){
+        this.particle(context)
+        if(this.splash.damage>0){
+        }
+    }
     particle(context){
         switch(context){
             case 0:
                 entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,5,this.color))
+            break
+            case 1:
+                if(this.splash.damage>0){
+                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,5,this.color))
+                }
             break
         }
     }

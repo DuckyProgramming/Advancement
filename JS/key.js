@@ -24,6 +24,9 @@ function keyPressed(){
 		case 'ArrowDown':
 			inputs.keys[1][3]=true
 		break
+		case ' ':
+			inputs.keys[2][0]=true
+		break
 		case 'p':
 			if(dev.mark){
 				print(inputs.screen.x,inputs.screen.y)
@@ -66,6 +69,9 @@ function keyReleased(){
 		break
 		case 'ArrowDown':
 			inputs.keys[1][3]=false
+		break
+		case ' ':
+			inputs.keys[2][0]=false
 		break
 	}
 }
