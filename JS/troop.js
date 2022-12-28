@@ -11,7 +11,7 @@ class troop extends physical{
         this.trigger={physics:{resistance:true,friction:true},movement:{active:false}}
         this.recoil={timer:[],value:[]}
         this.counter={fire:0}
-        this.calc={damage:0}
+        this.calc={damage:0,dist:0}
         this.hold={int:[random(0,100)]}
         this.tick=[0,0,0,0]
 		this.timers=[]
@@ -175,11 +175,34 @@ class troop extends physical{
                     stage.focus.x=this.position.x
                     stage.focus.y=this.position.y
                     stage.focus.scale=1
+                    if(this.life>0){
+                        game.player.alive=true
+                    }else{
+                        game.player.alive=false
+                    }
                     this.firing=mouseIsPressed
                 break
                 case 1:
-                    this.goal.position.x=stage.focus.x
-                    this.goal.position.y=stage.focus.y
+                    this.calc.dist=600
+                    for(let a=0,la=entities.troops.length;a<la;a++){
+                        if(entities.troops[a].life>0&&this.team!=entities.troops[a].team){
+                            this.calc.dist=min(this.calc.dist,dist(this.position.x,this.position.y,entities.troops[a].position.x,entities.troops[a].position.y))
+                        }
+                    }
+                    if(this.calc.dist==600){
+                        this.goal.position.x=stage.focus.x
+                        this.goal.position.y=stage.focus.y
+                    }else{
+                        for(let a=0,la=entities.troops.length;a<la;a++){
+                            if(dist(this.position.x,this.position.y,entities.troops[a].position.x,entities.troops[a].position.y)==this.calc.dist){
+                                this.goal.position.x=entities.troops[a].position.x
+                                this.goal.position.y=entities.troops[a].position.y
+                            }
+                        }
+                        if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<450){
+                            this.firing=true
+                        }
+                    }
                     this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
                     for(let a=0,la=this.tick.length;a<la;a++){
                         if(this.tick[a]==0&&floor(random(0,120))==0){
@@ -204,8 +227,18 @@ class troop extends physical{
                     }
                 break
                 case 2:
-                    this.goal.position.x=stage.focus.x
-                    this.goal.position.y=stage.focus.y
+                    this.calc.dist=1000000
+                    for(let a=0,la=entities.troops.length;a<la;a++){
+                        if(entities.troops[a].life>0&&this.team!=entities.troops[a].team){
+                            this.calc.dist=min(this.calc.dist,dist(this.position.x,this.position.y,entities.troops[a].position.x,entities.troops[a].position.y))
+                        }
+                    }
+                    for(let a=0,la=entities.troops.length;a<la;a++){
+                        if(dist(this.position.x,this.position.y,entities.troops[a].position.x,entities.troops[a].position.y)==this.calc.dist){
+                            this.goal.position.x=entities.troops[a].position.x
+                            this.goal.position.y=entities.troops[a].position.y
+                        }
+                    }
                     this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
                     for(let a=0,la=this.tick.length;a<la;a++){
                         if(this.tick[a]==0&&floor(random(0,120))==0){
