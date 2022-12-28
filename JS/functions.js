@@ -153,6 +153,7 @@ function generateWorld(layer,level){
 	if(level.length>0&&level[0].length>0){
 		game.edge.x=level[0].length*game.tileSize
 		game.edge.y=level.length*game.tileSize
+		game.player.team=missions[game.mission].player.team
 		for(let a=0,la=level.length;a<la;a++){
 			for(let b=0,lb=level[a].length;b<lb;b++){
 				if(level[a][b]>=100){
@@ -191,5 +192,5 @@ function generateWorld(layer,level){
 			}
 		}
 	}
-	run={fore:[entities.projectiles,entities.walls,entities.troops],info:[entities.troops]}
+	run={fore:[entities.projectiles,entities.walls,entities.troops,entities.particles],info:[entities.troops]}
 }

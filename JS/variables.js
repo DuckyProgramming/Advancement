@@ -2,7 +2,7 @@ types={
     projectile:[
         {
             name:'Beam',
-            damage:5,speed:10,size:3,
+            damage:20,speed:10,size:3,
             image:1,
         },
     ],troop:[
@@ -27,12 +27,12 @@ types={
 }
 dev={mark:true}
 stage={scale:0,focus:{x:0,y:0,scale:0},scene:'level',background:0}
-game={level:0,zone:0,mission:0,edge:{x:0,y:0},tileSize:40}
+game={level:0,zone:0,mission:0,edge:{x:0,y:0},player:{team:0},tileSize:40}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene}
 inputs={mouse:{x:0,y:0},screen:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false]]}
-entities={projectiles:[],walls:[],troops:[]}
+entities={projectiles:[],walls:[],troops:[],particles:[]}
 collision={incident:{x:0,y:0},calculate:{x:0,y:0}}
 calc={int:[0,0]}
 run={fore:[],info:[]}

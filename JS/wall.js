@@ -24,6 +24,7 @@ class wall extends physical{
                     this.collide.list[a][b].position.x=this.collide.position.x
                     this.collide.list[a][b].position.y=this.collide.position.y
                     if(a==0){
+						this.collide.list[a][b].particle(1)
 						this.collide.list[a][b].used=true
 					}else if(this.collide.list[a][b].trigger.physics.friction){
                         this.collide.list[a][b].velocity.x*=(1-physics.friction)
