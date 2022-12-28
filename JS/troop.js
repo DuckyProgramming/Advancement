@@ -21,10 +21,10 @@ class troop extends physical{
         this.primary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
         this.secondary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
 
-        this.type.life=types.troop[this.typeKey].life
-        this.type.speed=types.troop[this.typeKey].speed
-        this.type.turnSpeed=types.troop[this.typeKey].turnSpeed
-        this.type.size=types.troop[this.typeKey].size
+        this.life=types.troop[this.typeKey].life
+        this.speed=types.troop[this.typeKey].speed
+        this.turnSpeed=types.troop[this.typeKey].turnSpeed
+        this.size=types.troop[this.typeKey].size
 
         this.primary.reload=types.primary[this.primaryKey].reload[0]
         this.primary.projectile=types.primary[this.primaryKey].projectile
@@ -58,18 +58,8 @@ class troop extends physical{
             this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.y)
             this.layer.rotate(this.direction)
             this.layer.scale(this.scale)
-            this.layer.noStroke()
-            switch(this.type){
-                case 1:
-                    this.layer.fill(60,this.fade)
-                    this.layer.rect(12,-20+this.recoil.value[0],4,12)
-                break
-                case 2:
-                    this.layer.fill(60,this.fade)
-                    this.layer.rect(12,-22+this.recoil.value[0]+this.recoil.value[1]+this.recoil.value[2],3,16)
-                    this.layer.rect(12,-19+this.recoil.value[0],6,10)
-                break
-            }
+            this.displayWeapon(this.secondary,this.secondaryKey)
+            this.displayWeapon(this.primary,this.primaryKey)
             this.layer.noStroke()
             switch(this.body){
                 case 0:
@@ -96,6 +86,20 @@ class troop extends physical{
             this.layer.scale(1/this.scale)
             this.layer.rotate(-this.direction)
             this.layer.translate(-this.position.x-this.offset.position.x,-this.position.y-this.offset.position.y)
+        }
+    }
+    displayWeapon(weapon,key){
+        this.layer.noStroke()
+        switch(key){
+            case 1:
+                this.layer.fill(60,this.fade)
+                this.layer.rect(12,-20+weapon.recoil.value[0],4,12)
+            break
+            case 2:
+                this.layer.fill(60,this.fade)
+                this.layer.rect(12,-22+weapon.recoil.value[0]+weapon.recoil.value[1]+weapon.recoil.value[2],3,16)
+                this.layer.rect(12,-19+weapon.recoil.value[0],6,10)
+            break
         }
     }
     displayInfo(){
@@ -159,22 +163,30 @@ class troop extends physical{
             }else if(directionValue(this.direction,this.goal.direction,this.turnSpeed)==2){
                 this.direction-=this.turnSpeed
             }
-            for(let a=0,la=this.recoil.timer.length;a<la;a++){
-                if(this.recoil.timer[a]>0){
-                    this.recoil.timer[a]--
-                    this.recoil.value[a]+=this.recoilSet.speed
-                }else if(this.recoil.value[a]>0){
-                    this.recoil.value[a]-=this.recoilSet.return
+            for(let a=0,la=this.primary.recoil.timer.length;a<la;a++){
+                if(this.primary.recoil.timer[a]>0){
+                    this.primary.recoil.timer[a]--
+                    this.primary.recoil.value[a]+=this.primary.recoilSet.speed
+                }else if(this.primary.recoil.value[a]>0){
+                    this.primary.recoil.value[a]-=this.primary.recoilSet.return
                 }
             }
-            if(this.firing&&this.reload<=0&&this.base.reload[0]>0){
-                this.reload=this.base.reload[this.counter.fire%this.recoilSet.loop]
-                this.recoil.timer[this.counter.fire%this.recoilSet.loop]=this.recoilSet.anim
-                this.counter.fire++
-                entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.spawn.x-sin(this.direction)*this.spawn.y,this.position.y+cos(this.direction)*this.spawn.y+sin(this.direction)*this.spawn.x,this.projectile,this.direction+random(-this.spread,this.spread),this.team))
+            for(let a=0,la=this.secondary.recoil.timer.length;a<la;a++){
+                if(this.secondary.recoil.timer[a]>0){
+                    this.secondary.recoil.timer[a]--
+                    this.secondary.recoil.value[a]+=this.secondary.recoilSet.speed
+                }else if(this.secondary.recoil.value[a]>0){
+                    this.secondary.recoil.value[a]-=this.secondary.recoilSet.return
+                }
             }
-            if(this.reload>0){
-                this.reload--
+            if(this.primary.firing&&this.primary.reload<=0&&this.base.primary.reload[0]>0){
+                this.primary.reload=this.base.primary.reload[this.primary.counter.fire%this.primary.recoilSet.loop]
+                this.primary.recoil.timer[this.primary.counter.fire%this.primary.recoilSet.loop]=this.primary.recoilSet.anim
+                this.primary.counter.fire++
+                entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.primary.spawn.x-sin(this.direction)*this.primary.spawn.y,this.position.y+cos(this.direction)*this.primary.spawn.y+sin(this.direction)*this.primary.spawn.x,this.primary.projectile,this.direction+random(-this.primary.spread,this.primary.spread),this.team))
+            }
+            if(this.primary.reload>0){
+                this.primary.reload--
             }
             switch(this.control){
                 case 0:
@@ -199,7 +211,7 @@ class troop extends physical{
                     }else{
                         game.player.alive=false
                     }
-                    this.firing=mouseIsPressed
+                    this.primary.firing=mouseIsPressed
                 break
                 case 1:
                     this.calc.dist=600
@@ -218,8 +230,8 @@ class troop extends physical{
                                 this.goal.position.y=entities.troops[a].position.y
                             }
                         }
-                        if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<450){
-                            this.firing=true
+                        if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.primary.range[0]){
+                            this.primary.firing=true
                         }
                     }
                     this.goal.direction=atan2(this.goal.position.x-this.position.x,this.position.y-this.goal.position.y)
@@ -269,10 +281,10 @@ class troop extends physical{
                     if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<750){
                         this.trigger.movement.active=true
                     }
-                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.range[0]){
-                        this.firing=true
+                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.primary.range[0]){
+                        this.primary.firing=true
                     }
-                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.range[1]+this.hold.int[0]&&this.trigger.movement.active){
+                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]+this.hold.int[0]&&this.trigger.movement.active){
                         if(this.position.x>stage.focus.x+10||this.tick[0]==1){
                             this.velocity.x-=this.speed/10
                         }

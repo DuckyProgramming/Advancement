@@ -160,7 +160,7 @@ function generateWorld(layer,level){
 				if(level[a][b]>=100){
 					entities.walls.push(new wall(layer,b*game.tileSize+floor((level[a][b]%100)/10)*game.tileSize/2+game.tileSize/2,a*game.tileSize+(level[a][b]%10)*game.tileSize/2+game.tileSize/2,floor(level[a][b]/100),floor((level[a][b]%100)/10)*game.tileSize+game.tileSize,(level[a][b]%10)*game.tileSize+game.tileSize))
 				}else if(level[a][b]==-1){
-					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].player.type,missions[game.mission].player.body,missions[game.mission].player.direction,missions[game.mission].player.team,0,missions[game.mission].player.name))
+					entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2,a*game.tileSize+game.tileSize/2,missions[game.mission].player.type,missions[game.mission].player.primary,missions[game.mission].player.secondary,missions[game.mission].player.body,missions[game.mission].player.direction,missions[game.mission].player.team,0,missions[game.mission].player.name))
 					calc.int[0]=0
 					calc.int[1]=0
 					for(let c=0,lc=missions[game.mission].ally.length;c<lc;c++){
@@ -170,7 +170,7 @@ function generateWorld(layer,level){
 					}
 					for(let c=0,lc=missions[game.mission].ally.length;c<lc;c++){
 						for(let d=0,ld=missions[game.mission].ally[c].number;d<ld;d++){
-							entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2+sin(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*50,a*game.tileSize+game.tileSize/2+cos(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*50,missions[game.mission].ally[c].type,missions[game.mission].ally[c].body,missions[game.mission].ally[c].direction,missions[game.mission].ally[c].team,1,missions[game.mission].ally[c].name[d]))
+							entities.troops.push(new troop(layer,b*game.tileSize+game.tileSize/2+sin(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*50,a*game.tileSize+game.tileSize/2+cos(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*50,missions[game.mission].ally[c].type,missions[game.mission].ally[c].primary,missions[game.mission].ally[c].secondary,missions[game.mission].ally[c].body,missions[game.mission].ally[c].direction,missions[game.mission].ally[c].team,1,missions[game.mission].ally[c].name[d]))
 							calc.int[1]++
 						}
 					}
@@ -187,7 +187,7 @@ function generateWorld(layer,level){
 			}
 			for(let b=0,lb=missions[game.mission].other[a].group.length;b<lb;b++){
 				for(let c=0,lc=missions[game.mission].other[a].group[b].number;c<lc;c++){
-					entities.troops.push(new troop(layer,missions[game.mission].other[a].position.x+sin(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].position.y+cos(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].group[b].type,missions[game.mission].other[a].group[b].body,missions[game.mission].other[a].group[b].direction,missions[game.mission].other[a].group[b].team,2))
+					entities.troops.push(new troop(layer,missions[game.mission].other[a].position.x+sin(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].position.y+cos(calc.int[1]/calc.int[0]*360)*sqrt(calc.int[0])*25,missions[game.mission].other[a].group[b].type,missions[game.mission].other[a].group[b].primary,missions[game.mission].other[a].group[b].secondary,missions[game.mission].other[a].group[b].body,missions[game.mission].other[a].group[b].direction,missions[game.mission].other[a].group[b].team,2))
 					calc.int[1]++
 				}
 			}
