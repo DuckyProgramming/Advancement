@@ -12,6 +12,7 @@ class projectile extends entity{
         this.trigger=types.projectile[this.type].trigger
         this.splash=types.projectile[this.type].splash
         this.collide={list:[entities.troops]}
+        this.boost={particle:1}
     }
     display(){
         if(this.fade>0&&this.size>0&&this.scale>0){
@@ -66,11 +67,11 @@ class projectile extends entity{
         if(this.scale<1){
             this.scale=round(this.scale*5+1)/5
         }
-        if(!this.used){
+        if(!this.used&&this.trigger.hit){
             for(let a=0,la=this.collide.list.length;a<la;a++){
                 for(let b=0,lb=this.collide.list[a].length;b<lb;b++){
                     if(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)<this.size+this.collide.list[a][b].size&&this.collide.list[a][b].life>0&&this.team!=this.collide.list[a][b].team&&!this.used){
-                        this.splash(0)
+                        this.impact(0)
                         this.used=true
                         this.collide.list[a][b].take(this.damage,this.direction)
                     }
@@ -79,18 +80,30 @@ class projectile extends entity{
         }
     }
     impact(context){
-        this.particle(context)
         if(this.splash.damage>0){
+            this.boost.particle=this.splash.range/sqrt(this.damage)/8
+            for(let a=0,la=this.collide.list.length;a<la;a++){
+                for(let b=0,lb=this.collide.list[a].length;b<lb;b++){
+                    if(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)<this.splash.range&&this.collide.list[a][b].life>0){
+                        switch(this.splash.class){
+                            case 0:
+                                this.collide.list[a][b].take(this.splash.damage*this.damage*(1-(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)/this.splash.range)),this.direction)
+                            break
+                        }
+                    }
+                }
+            }
         }
+        this.particle(context)
     }
     particle(context){
         switch(context){
             case 0:
-                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,5,this.color))
+                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
             break
             case 1:
                 if(this.splash.damage>0){
-                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,5,this.color))
+                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
                 }
             break
         }
