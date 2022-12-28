@@ -7,7 +7,7 @@ function draw(){
 		case 'level':
 			switch(stage.background){
 				case 0:
-					graphics.main.background(150)
+					graphics.main.background(120)
 				break
 			}
 			graphics.main.translate(-stage.focus.x,-stage.focus.y)

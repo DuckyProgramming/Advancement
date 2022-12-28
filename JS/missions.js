@@ -1,14 +1,27 @@
 missions=[
     {
-        name:'Ordinary Routine',
-        player:{type:1,body:1,direction:0,team:0,name:['Duckipo']},
+        name:'',
+        player:{type:2,primary:2,secondary:0,body:1,direction:0,team:0,name:['Duckipo']},
         ally:[
-            {type:1,body:1,direction:0,team:0,number:2,name:['Dippy','Dukep']}
+            {type:0,primary:0,secondary:0,body:1,direction:0,team:0,number:0,name:[]}
         ],
         other:[
             {
                 position:{x:60,y:60},group:[
-                    {type:1,body:0,direction:0,team:1,number:3}
+                    {type:0,body:0,direction:0,team:1,number:0}
+                ]
+            },
+        ]
+    },{
+        name:'Ordinary Routine',
+        player:{type:1,primary:1,secondary:0,body:1,direction:0,team:0,name:['Duckipo']},
+        ally:[
+            {type:1,primary:1,secondary:0,body:1,direction:0,team:0,number:2,name:['Dippy','Dukep']}
+        ],
+        other:[
+            {
+                position:{x:60,y:60},group:[
+                    {type:1,primary:1,secondary:0,body:0,direction:0,team:1,number:3}
                 ]
             },
         ]

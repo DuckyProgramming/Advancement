@@ -2,20 +2,46 @@ types={
     projectile:[
         {
             name:'Beam',
-            damage:20,speed:10,size:3,
+            damage:25,speed:15,size:4,
+            image:1,
+        },{
+            name:'Light Beam',
+            damage:15,speed:12,size:3,
             image:1,
         },
     ],troop:[
         {
-            name:'Unarmed',
+            name:'None',
             life:100,speed:3,size:15,turnSpeed:10,
-            reload:0,projectile:0,spread:0,spawn:{x:0,y:0},
+        },{
+            name:'Basic',
+            life:120,speed:2,size:15,turnSpeed:6,
+        },{
+            name:'Standard',
+            life:160,speed:1.5,size:15,turnSpeed:5,
+        },{
+            name:'Heavy',
+            life:240,speed:1.25,size:15,turnSpeed:4,
+        },
+    ],primary:[
+        {
+            name:'Unarmed',
+            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],
             recoil:{loop:0,anim:0,speed:0,return:0},
         },{
             name:'Pistol',
-            life:120,speed:2,size:15,turnSpeed:6,
-            reload:30,projectile:0,spread:5,spawn:{x:12,y:-20},
+            reload:[30],projectile:0,spread:5,spawn:{x:12,y:-15},range:[400,250],
             recoil:{loop:1,anim:3,speed:1,return:0.2},
+        },{
+            name:'Assault',
+            reload:[10,10,60],projectile:1,spread:10,spawn:{x:12,y:-15},range:[500,300],
+            recoil:{loop:3,anim:4,speed:1,return:0.5},
+        },
+    ],secondary:[
+        {
+            name:'Unarmed',
+            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],
+            recoil:{loop:0,anim:0,speed:0,return:0},
         },
     ],team:[
         {

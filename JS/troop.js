@@ -1,7 +1,9 @@
 class troop extends physical{
-    constructor(layer,x,y,type,body,direction,team,control,name=''){
+    constructor(layer,x,y,type,primary,secondary,body,direction,team,control,name=''){
         super(layer,x,y,0,30,90)
-        this.type=type
+        this.typeKey=type
+        this.primaryKey=primary
+        this.secondaryKey=secondary
         this.body=body
         this.direction=direction
         this.team=team
@@ -9,34 +11,46 @@ class troop extends physical{
         this.name=name
         this.offset={position:{x:0,y:0}}
         this.trigger={physics:{resistance:true,friction:true},movement:{active:false}}
-        this.recoil={timer:[],value:[]}
-        this.counter={fire:0}
         this.calc={damage:0,dist:0}
         this.hold={int:[random(0,100)]}
         this.tick=[0,0,0,0]
 		this.timers=[]
         this.scale=1
-        this.firing=false
 
-        this.life=types.troop[this.type].life
-        this.speed=types.troop[this.type].speed
-        this.turnSpeed=types.troop[this.type].turnSpeed
-        this.size=types.troop[this.type].size
+        this.type={}
+        this.primary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
+        this.secondary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
 
-        this.reload=types.troop[this.type].reload
-        this.projectile=types.troop[this.type].projectile
-        this.spread=types.troop[this.type].spread
-        this.spawn=types.troop[this.type].spawn
+        this.type.life=types.troop[this.typeKey].life
+        this.type.speed=types.troop[this.typeKey].speed
+        this.type.turnSpeed=types.troop[this.typeKey].turnSpeed
+        this.type.size=types.troop[this.typeKey].size
 
-        this.recoilSet=types.troop[this.type].recoil
+        this.primary.reload=types.primary[this.primaryKey].reload[0]
+        this.primary.projectile=types.primary[this.primaryKey].projectile
+        this.primary.spread=types.primary[this.primaryKey].spread
+        this.primary.spawn=types.primary[this.primaryKey].spawn
+        this.primary.range=types.primary[this.primaryKey].range
+        this.primary.recoilSet=types.primary[this.primaryKey].recoil
 
-        this.base={life:this.life,reload:this.reload}
+        this.secondary.reload=types.secondary[this.secondaryKey].reload[0]
+        this.secondary.projectile=types.secondary[this.secondaryKey].projectile
+        this.secondary.spread=types.secondary[this.secondaryKey].spread
+        this.secondary.spawn=types.secondary[this.secondaryKey].spawn
+        this.secondary.range=types.secondary[this.secondaryKey].range
+        this.secondary.recoilSet=types.secondary[this.secondaryKey].recoil
+
+        this.base={life:this.life,primary:{reload:types.primary[this.primaryKey].reload},secondary:{reload:types.secondary[this.secondaryKey].reload}}
         this.collect={life:this.life}
         this.goal={position:{x:this.position.x,y:this.position.y},direction:this.direction}
 
-        for(a=0;a<this.recoilSet.loop;a++){
-            this.recoil.timer.push(0)
-            this.recoil.value.push(0)
+        for(a=0;a<this.primary.recoilSet.loop;a++){
+            this.primary.recoil.timer.push(0)
+            this.primary.recoil.value.push(0)
+        }
+        for(a=0;a<this.secondary.recoilSet.loop;a++){
+            this.secondary.recoil.timer.push(0)
+            this.secondary.recoil.value.push(0)
         }
     }
     display(){
@@ -49,6 +63,11 @@ class troop extends physical{
                 case 1:
                     this.layer.fill(60,this.fade)
                     this.layer.rect(12,-20+this.recoil.value[0],4,12)
+                break
+                case 2:
+                    this.layer.fill(60,this.fade)
+                    this.layer.rect(12,-22+this.recoil.value[0]+this.recoil.value[1]+this.recoil.value[2],3,16)
+                    this.layer.rect(12,-19+this.recoil.value[0],6,10)
                 break
             }
             this.layer.noStroke()
@@ -148,8 +167,8 @@ class troop extends physical{
                     this.recoil.value[a]-=this.recoilSet.return
                 }
             }
-            if(this.firing&&this.reload<=0&&this.base.reload>0){
-                this.reload=this.base.reload
+            if(this.firing&&this.reload<=0&&this.base.reload[0]>0){
+                this.reload=this.base.reload[this.counter.fire%this.recoilSet.loop]
                 this.recoil.timer[this.counter.fire%this.recoilSet.loop]=this.recoilSet.anim
                 this.counter.fire++
                 entities.projectiles.push(new projectile(this.layer,this.position.x+cos(this.direction)*this.spawn.x-sin(this.direction)*this.spawn.y,this.position.y+cos(this.direction)*this.spawn.y+sin(this.direction)*this.spawn.x,this.projectile,this.direction+random(-this.spread,this.spread),this.team))
@@ -250,10 +269,10 @@ class troop extends physical{
                     if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<750){
                         this.trigger.movement.active=true
                     }
-                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<450){
+                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.range[0]){
                         this.firing=true
                     }
-                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>250+this.hold.int[0]&&this.trigger.movement.active){
+                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.range[1]+this.hold.int[0]&&this.trigger.movement.active){
                         if(this.position.x>stage.focus.x+10||this.tick[0]==1){
                             this.velocity.x-=this.speed/10
                         }
@@ -264,6 +283,19 @@ class troop extends physical{
                             this.velocity.y-=this.speed/10
                         }
                         if(this.position.y<stage.focus.y-10||this.tick[3]==1){
+                            this.velocity.y+=this.speed/10
+                        }
+                    }else if(this.trigger.movement.active){
+                        if(this.tick[0]==1){
+                            this.velocity.x-=this.speed/10
+                        }
+                        if(this.tick[1]==1){
+                            this.velocity.x+=this.speed/10
+                        }
+                        if(this.tick[2]==1){
+                            this.velocity.y-=this.speed/10
+                        }
+                        if(this.tick[3]==1){
                             this.velocity.y+=this.speed/10
                         }
                     }

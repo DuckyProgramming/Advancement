@@ -19,10 +19,10 @@ class projectile extends entity{
             switch(this.image){
                 case 1:
                     this.layer.stroke(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
-                    this.layer.strokeWeight(8)
+                    this.layer.strokeWeight(6)
                     this.layer.line(0,-40,0,40)
                     this.layer.stroke(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
-                    this.layer.strokeWeight(6)
+                    this.layer.strokeWeight(4)
                     this.layer.line(0,-30,0,30)
                 break
             }
