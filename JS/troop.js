@@ -1,7 +1,8 @@
+
 class troop extends physical{
     constructor(layer,x,y,type,primary,secondary,body,direction,team,control,name=''){
         super(layer,x,y,0,30,90)
-        this.typeKey=type
+        this.type=type
         this.primaryKey=primary
         this.secondaryKey=secondary
         this.body=body
@@ -16,21 +17,20 @@ class troop extends physical{
         this.tick=[0,0,0,0]
 		this.timers=[]
         this.scale=1
-
-        this.type={}
         this.primary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
         this.secondary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
 
-        this.life=types.troop[this.typeKey].life
-        this.speed=types.troop[this.typeKey].speed
-        this.turnSpeed=types.troop[this.typeKey].turnSpeed
-        this.size=types.troop[this.typeKey].size
+        this.life=types.troop[this.type].life
+        this.speed=types.troop[this.type].speed
+        this.turnSpeed=types.troop[this.type].turnSpeed
+        this.size=types.troop[this.type].size
 
         this.primary.reload=types.primary[this.primaryKey].reload[0]
         this.primary.projectile=types.primary[this.primaryKey].projectile
         this.primary.spread=types.primary[this.primaryKey].spread
         this.primary.spawn=types.primary[this.primaryKey].spawn
         this.primary.range=types.primary[this.primaryKey].range
+        this.primary.speed=types.primary[this.primaryKey].speed
         this.primary.recoilSet=types.primary[this.primaryKey].recoil
 
         this.secondary.reload=types.secondary[this.secondaryKey].reload[0]
@@ -38,8 +38,12 @@ class troop extends physical{
         this.secondary.spread=types.secondary[this.secondaryKey].spread
         this.secondary.spawn=types.secondary[this.secondaryKey].spawn
         this.secondary.range=types.secondary[this.secondaryKey].range
+        this.secondary.speed=types.secondary[this.secondaryKey].speed
         this.secondary.recoilSet=types.secondary[this.secondaryKey].recoil
 
+        this.life*=types.team[this.team].life
+        this.speed*=this.primary.speed*this.secondary.speed*types.team[this.team].speed
+        
         this.base={life:this.life,primary:{reload:types.primary[this.primaryKey].reload},secondary:{reload:types.secondary[this.secondaryKey].reload}}
         this.collect={life:this.life}
         this.goal={position:{x:this.position.x,y:this.position.y},direction:this.direction}
@@ -58,7 +62,10 @@ class troop extends physical{
             this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.y)
             this.layer.rotate(this.direction)
             this.layer.scale(this.scale)
+            this.displayBaseLower(this.type)
+            this.layer.scale(-1,1)
             this.displayWeapon(this.secondary,this.secondaryKey)
+            this.layer.scale(-1,1)
             this.displayWeapon(this.primary,this.primaryKey)
             this.layer.noStroke()
             switch(this.body){
@@ -83,9 +90,33 @@ class troop extends physical{
                     this.layer.line(4,-21,4,-22)
                 break
             }
+            this.displayBaseUpper(this.type)
             this.layer.scale(1/this.scale)
             this.layer.rotate(-this.direction)
             this.layer.translate(-this.position.x-this.offset.position.x,-this.position.y-this.offset.position.y)
+        }
+    }
+    displayBaseLower(base){
+        this.layer.noStroke()
+        switch(base){
+            case 1:
+                this.layer.fill(40,80,40,this.fade)
+                this.layer.rect(19,0,4,16,2)
+            break
+            case 3:
+                this.layer.fill(60,this.fade)
+                this.layer.ellipse(0,0,44,44)
+            break
+        }
+    }
+    displayBaseUpper(base){
+        this.layer.noStroke()
+        switch(base){
+            case 2: case 3:
+                this.layer.fill(80,this.fade)
+                this.layer.arc(0,0,48,48,0,180)
+                this.layer.arc(0,1,48,12,-180,0)
+            break
         }
     }
     displayWeapon(weapon,key){
@@ -99,6 +130,18 @@ class troop extends physical{
                 this.layer.fill(60,this.fade)
                 this.layer.rect(12,-22+weapon.recoil.value[0]+weapon.recoil.value[1]+weapon.recoil.value[2],3,16)
                 this.layer.rect(12,-19+weapon.recoil.value[0],6,10)
+            break
+            case 3:
+                this.layer.fill(60,this.fade)
+                this.layer.rect(12,-21,8,14)
+                this.layer.rect(10,-30+weapon.recoil.value[0],3,8)
+                this.layer.rect(14,-30+weapon.recoil.value[1],3,8)
+            break
+            case 4:
+                this.layer.fill(120,this.fade)
+                this.layer.stroke(100,this.fade)
+                this.layer.strokeWeight(3)
+                this.layer.ellipse()
             break
         }
     }

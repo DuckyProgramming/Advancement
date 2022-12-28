@@ -8,6 +8,10 @@ types={
             name:'Light Beam',
             damage:15,speed:12,size:3,
             image:1,
+        },{
+            name:'Pellet Beam',
+            damage:5,speed:18,size:2,
+            image:2,
         },
     ],troop:[
         {
@@ -26,34 +30,44 @@ types={
     ],primary:[
         {
             name:'Unarmed',
-            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],
+            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
             recoil:{loop:0,anim:0,speed:0,return:0},
         },{
             name:'Pistol',
-            reload:[30],projectile:0,spread:5,spawn:{x:12,y:-15},range:[400,250],
+            reload:[30],projectile:0,spread:3,spawn:{x:12,y:-15},range:[400,250],speed:0.9,
             recoil:{loop:1,anim:3,speed:1,return:0.2},
         },{
             name:'Assault',
-            reload:[10,10,60],projectile:1,spread:10,spawn:{x:12,y:-15},range:[500,300],
+            reload:[10,10,60],projectile:1,spread:5,spawn:{x:12,y:-15},range:[500,300],speed:0.7,
             recoil:{loop:3,anim:4,speed:1,return:0.5},
+        },{
+            name:'Machine Gun',
+            reload:[5,5],projectile:2,spread:10,spawn:{x:12,y:-15},range:[350,200],speed:0.5,
+            recoil:{loop:2,anim:2,speed:1,return:0.25},
         },
     ],secondary:[
         {
             name:'Unarmed',
-            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],
+            reload:[0],projectile:0,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
             recoil:{loop:0,anim:0,speed:0,return:0},
+        },{
+            name:'Grenade',
+            reload:[300],projectile:3,spread:10,spawn:{x:-12,y:-6},range:[200,150],speed:0.95,
+            recoil:{loop:1,anim:2,speed:2,return:0.1},
         },
     ],team:[
         {
             color:[[50,255,50],[100,255,100]],
+            life:1,speed:1,
         },{
             color:[[50,50,255],[100,100,255]],
+            life:1,speed:1,
         },
     ]
 }
 dev={mark:true}
 stage={scale:0,focus:{x:0,y:0,scale:0},scene:'level',background:0}
-game={level:0,zone:0,mission:1,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
+game={level:0,zone:0,mission:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene}

@@ -16,6 +16,7 @@ class projectile extends entity{
             this.layer.translate(this.position.x,this.position.y)
             this.layer.rotate(this.direction)
             this.layer.scale(this.size*this.scale/10)
+            this.layer.noStroke()
             switch(this.image){
                 case 1:
                     this.layer.stroke(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
@@ -24,6 +25,12 @@ class projectile extends entity{
                     this.layer.stroke(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
                     this.layer.strokeWeight(4)
                     this.layer.line(0,-30,0,30)
+                break
+                case 2:
+                    this.layer.fill(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
+                    this.layer.ellipse(0,0,30,30)
+                    this.layer.fill(this.color[1][0],this.color[1][1],this.color[1][2],this.fade)
+                    this.layer.ellipse(0,0,20,20)
                 break
             }
             this.layer.scale(10/this.size/this.scale)
@@ -58,6 +65,10 @@ class projectile extends entity{
         }
     }
     particle(context){
-        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,2,this.color))
+        switch(context){
+            case 0:
+                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10,5,this.color))
+            break
+        }
     }
 }

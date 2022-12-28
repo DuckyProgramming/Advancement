@@ -1,7 +1,7 @@
 missions=[
     {
         name:'',
-        player:{type:2,primary:2,secondary:0,body:1,direction:0,team:0,name:['Duckipo']},
+        player:{type:1,primary:1,secondary:1,body:1,direction:0,team:0,name:['Duckipo']},
         ally:[
             {type:0,primary:0,secondary:0,body:1,direction:0,team:0,number:0,name:[]}
         ],
