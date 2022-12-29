@@ -8,11 +8,13 @@ class projectile extends entity{
         this.damage=types.projectile[this.type].damage
         this.speed=types.projectile[this.type].speed
         this.size=types.projectile[this.type].size
+        this.time=types.projectile[this.type].time
         this.image=types.projectile[this.type].image
         this.trigger=types.projectile[this.type].trigger
         this.splash=types.projectile[this.type].splash
         this.collide={list:[entities.troops]}
         this.boost={particle:1}
+        this.end={time:this.time,value:1}
     }
     display(){
         if(this.fade>0&&this.size>0&&this.scale>0){
@@ -57,6 +59,14 @@ class projectile extends entity{
             this.speed=0
             if(this.fade<=0){
                 this.remove=true
+            }
+        }
+        if(this.end.time>0){
+            this.end.time-=this.end.value
+        }else if(!this.used){
+            this.used=true
+            if(this.trigger.destruct){
+                this.impact(1)
             }
         }
         if(this.trigger.physics.resistance){
