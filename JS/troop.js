@@ -264,7 +264,6 @@ class troop extends physical{
                     }
                     stage.focus.x=this.position.x
                     stage.focus.y=this.position.y
-                    stage.focus.scale=1
                     if(this.life>0){
                         game.player.alive=true
                     }else{

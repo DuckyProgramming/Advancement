@@ -78,7 +78,7 @@ types={
     ]
 }
 dev={mark:true}
-stage={scale:0,focus:{x:0,y:0,scale:0},scene:'level',background:0}
+stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level',background:0}
 game={level:0,zone:0,mission:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
