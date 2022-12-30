@@ -28,16 +28,20 @@ types={
     ],troop:[
         {
             name:'None',
-            life:100,speed:3,size:15,turnSpeed:10,
+            life:100,heal:120,speed:3,size:15,turnSpeed:10,
+            timer:{life:600},
         },{
             name:'Basic',
-            life:120,speed:2,size:15,turnSpeed:6,
+            life:120,heal:90,speed:2,size:15,turnSpeed:6, 
+            timer:{life:480},
         },{
             name:'Standard',
-            life:160,speed:1.5,size:15,turnSpeed:5,
+            life:160,heal:105,speed:1.5,size:15,turnSpeed:5,
+            timer:{life:540},
         },{
             name:'Heavy',
-            life:240,speed:1.25,size:15,turnSpeed:4,
+            life:240,heal:150,speed:1.25,size:15,turnSpeed:4,
+            timer:{life:720},
         },
     ],primary:[
         {
@@ -56,6 +60,14 @@ types={
             name:'Machine Gun',
             reload:[5,5],projectile:2,spread:10,spawn:{x:12,y:-15},range:[350,200],speed:0.5,
             recoil:{loop:2,anim:2,speed:1,return:0.25},
+        },{
+            name:'Fists',
+            reload:[0],projectile:4,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
+            recoil:{loop:0,anim:0,speed:0,return:0},
+        },{
+            name:'Baseball Bat',
+            reload:[0],projectile:5,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
+            recoil:{loop:0,anim:0,speed:0,return:0},
         },
     ],secondary:[
         {
@@ -66,6 +78,14 @@ types={
             name:'Grenade',
             reload:[240],projectile:3,spread:10,spawn:{x:-12,y:-6},range:[200,150],speed:0.95,
             recoil:{loop:1,anim:6,speed:2,return:0.1},
+        },{
+            name:'Rock Throw',
+            reload:[0],projectile:6,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
+            recoil:{loop:0,anim:0,speed:0,return:0},
+        },{
+            name:'Baseball Throw',
+            reload:[0],projectile:7,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
+            recoil:{loop:0,anim:0,speed:0,return:0},
         },
     ],team:[
         {

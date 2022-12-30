@@ -83,7 +83,7 @@ class projectile extends entity{
                     if(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)<this.size+this.collide.list[a][b].size&&this.collide.list[a][b].life>0&&this.team!=this.collide.list[a][b].team&&!this.used){
                         this.impact(0)
                         this.used=true
-                        this.collide.list[a][b].take(this.damage,this.direction)
+                        this.collide.list[a][b].take(this.damage,this.direction,0)
                     }
                 }
             }
@@ -97,7 +97,7 @@ class projectile extends entity{
                     if(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)<this.splash.range&&this.collide.list[a][b].life>0){
                         switch(this.splash.class){
                             case 0:
-                                this.collide.list[a][b].take(this.splash.damage*this.damage*(1-(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)/this.splash.range)),this.direction)
+                                this.collide.list[a][b].take(this.splash.damage*this.damage*(1-(dist(this.position.x,this.position.y,this.collide.list[a][b].position.x,this.collide.list[a][b].position.y)/this.splash.range)),this.direction,0)
                             break
                         }
                     }

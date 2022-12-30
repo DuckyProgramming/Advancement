@@ -1,10 +1,11 @@
 
 class troop extends physical{
-    constructor(layer,x,y,type,primary,secondary,body,direction,team,control,name=''){
+    constructor(layer,x,y,type,primary,secondary,passive,body,direction,team,control,name=''){
         super(layer,x,y,0,30,90)
         this.type=type
         this.primaryKey=primary
         this.secondaryKey=secondary
+        this.passiveKey=passive
         this.body=body
         this.direction=direction
         this.team=team
@@ -19,11 +20,15 @@ class troop extends physical{
         this.scale=1
         this.primary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
         this.secondary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
-
+        
         this.life=types.troop[this.type].life
+        this.heal=types.troop[this.type].heal
         this.speed=types.troop[this.type].speed
         this.turnSpeed=types.troop[this.type].turnSpeed
         this.size=types.troop[this.type].size
+
+        this.shield=0
+        this.shieldTimer=0
 
         this.primary.reload=types.primary[this.primaryKey].reload[0]
         this.primary.projectile=types.primary[this.primaryKey].projectile
@@ -45,9 +50,20 @@ class troop extends physical{
         this.life*=types.team[this.team].life
         this.speed*=this.primary.speed*this.secondary.speed*types.team[this.team].speed
         
-        this.base={life:this.life,primary:{reload:types.primary[this.primaryKey].reload},secondary:{reload:types.secondary[this.secondaryKey].reload}}
+        this.timer={life:types.troop[this.type].timer.life,shield:0}
+        this.base={life:this.life,primary:{reload:types.primary[this.primaryKey].reload},secondary:{reload:types.secondary[this.secondaryKey].reload},timer:{life:this.timer.life,shield:0}}
         this.collect={life:this.life}
         this.goal={position:{x:this.position.x,y:this.position.y},direction:this.direction}
+
+        switch(this.passiveKey){
+            case 1:
+                this.shield=20
+                this.base.shield=this.shield
+                this.collect.shield=this.shield
+                this.timer.shield=300
+                this.base.timer.shield=this.timer.shield
+            break
+        }
 
         for(a=0;a<this.primary.recoilSet.loop;a++){
             this.primary.recoil.timer.push(0)
@@ -170,10 +186,33 @@ class troop extends physical{
 			this.layer.fill(min(255,510-max(0,this.collect.life)/this.base.life*510)-max(0,5-max(0,this.collect.life)/this.base.life*30)*25,max(0,this.collect.life)/this.base.life*510,0,this.fade)
 			this.layer.rect((max(0,this.collect.life)/this.base.life)*25-25,this.size+20,(max(0,this.collect.life)/this.base.life)*50,2+min((max(0,this.collect.life)/this.base.life)*90,5),3)
 		}
-		this.layer.fill(0,this.fade)
-		this.layer.textSize(7)
-		this.layer.text(max(0,ceil(this.life*10)/10)+"/"+max(0,ceil(this.base.life)),0,this.size+21)
-        this.layer.text(this.name,0,this.size+29)
+        if(this.base.shield>0){
+            this.layer.fill(0,this.fade)
+            this.layer.rect(0,this.size+30,52,9,4)
+            this.layer.fill(150,this.fade)
+            this.layer.rect(0,this.size+30,50,7,3)
+            if(this.collect.shield>=this.shield&&this.collect.shield>0){
+                this.layer.fill(150,255,255,this.fade)
+                this.layer.rect((max(0,this.collect.shield)/this.base.shield)*25-25,this.size+30,(max(0,this.collect.shield)/this.base.shield)*50,2+min((max(0,this.collect.shield)/this.base.shield)*90,5),3)
+                this.layer.fill(0,max(0,this.shield)/this.base.shield*155+100,255,this.fade)
+                this.layer.rect((max(0,this.shield)/this.base.shield)*25-25,this.size+30,(max(0,this.shield)/this.base.shield)*50,2+min((max(0,this.shield)/this.base.shield)*90,5),3)
+            }else if(this.collect.shield<this.shield&&this.shield>0){
+                this.layer.fill(150,255,255,this.fade)
+                this.layer.rect((max(0,this.shield)/this.base.shield)*25-25,this.size+30,(max(0,this.shield)/this.base.shield)*50,2+min((max(0,this.shield)/this.base.shield)*90,5),3)
+                this.layer.fill(0,max(0,this.collect.shield)/this.base.shield*155+100,255,this.fade)
+                this.layer.rect((max(0,this.collect.shield)/this.base.shield)*25-25,this.size+30,(max(0,this.collect.shield)/this.base.shield)*50,2+min((max(0,this.collect.shield)/this.base.shield)*90,5),3)
+            }
+            this.layer.fill(0,this.fade)
+            this.layer.textSize(7)
+            this.layer.text(max(0,ceil(this.life))+"/"+max(0,ceil(this.base.life)),0,this.size+21)
+            this.layer.text(max(0,ceil(this.shield))+"/"+max(0,ceil(this.base.shield)),0,this.size+31)
+            this.layer.text(this.name,0,this.size+39)
+        }else{
+            this.layer.fill(0,this.fade)
+            this.layer.textSize(7)
+            this.layer.text(max(0,ceil(this.life))+"/"+max(0,ceil(this.base.life)),0,this.size+21)
+            this.layer.text(this.name,0,this.size+29)
+        }
         this.layer.translate(-this.position.x,-this.position.y)
     }
     update(){
@@ -187,6 +226,9 @@ class troop extends physical{
             this.life=min(this.life,this.base.life)
             this.collect.life=min(this.collect.life,this.base.life)
             this.collect.life=this.collect.life*0.9+this.life*0.1
+            this.shield=min(this.shield,this.base.shield)
+            this.collect.shield=min(this.collect.shield,this.base.shield)
+            this.collect.shield=this.collect.shield*0.9+this.shield*0.1
             if(this.trigger.physics.resistance){
                 this.velocity.x*=(1-physics.resistance)
                 this.velocity.y*=(1-physics.resistance)
@@ -246,6 +288,17 @@ class troop extends physical{
             }
             if(this.secondary.reload>0){
                 this.secondary.reload--
+            }
+            if(this.timer.shield>0){
+                this.timer.shield--
+            }else if(this.shield<=0){
+                this.timer.shield=this.base.timer.shield
+                this.shield=this.base.shield
+            }
+            if(this.timer.life>0){
+                this.timer.life--
+            }else if(this.life<this.base.life){
+                this.life+=this.base.life/this.heal
             }
             switch(this.control){
                 case 0:
@@ -374,8 +427,18 @@ class troop extends physical{
             }
         }
     }
-    take(damage,direction){
+    take(damage,direction,context){
         this.calc.damage=damage
-        this.life-=this.calc.damage
+        if(this.shield>=this.calc.damage&&context!=1){
+            this.shield-=this.calc.damage
+        }else if(this.shield>0&&context!=1){
+            this.life-=this.calc.damage-this.shield
+            this.shield=0
+            this.timer.life=this.base.timer.life
+            this.timer.shield=this.base.timer.shield
+        }else{
+            this.timer.life=this.base.timer.life
+            this.life-=this.calc.damage
+        }
     }
 }
