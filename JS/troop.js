@@ -48,7 +48,9 @@ class troop extends physical{
 
         this.color=types.team[this.team].color
         this.life*=types.team[this.team].life
-        this.speed*=this.primary.speed*this.secondary.speed*types.team[this.team].speed
+        this.speed*=this.primary.speed*this.secondary.speed*types.team[this.team].speed*types.passive[this.passiveKey].speed
+
+        this.baseColor=types.body[this.body].color
         
         this.timer={life:types.troop[this.type].timer.life,shield:0}
         this.base={life:this.life,primary:{reload:types.primary[this.primaryKey].reload},secondary:{reload:types.secondary[this.secondaryKey].reload},timer:{life:this.timer.life,shield:0}}
@@ -85,7 +87,7 @@ class troop extends physical{
             this.layer.noStroke()
             switch(this.body){
                 case 0:
-                    this.layer.fill(230,210,140,this.fade)
+                    this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
                     this.layer.ellipse(0,0,40,40)
                     this.layer.fill(0,this.fade)
                     this.layer.ellipse(-8,-9,6,6)
@@ -94,7 +96,7 @@ class troop extends physical{
                 case 1:
                     this.layer.fill(255,145,25,this.fade)
                     this.layer.ellipse(0,-18,24,16)
-                    this.layer.fill(255,235,35,this.fade)
+                    this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
                     this.layer.ellipse(0,0,40,40)
                     this.layer.fill(0,this.fade)
                     this.layer.ellipse(-8,-9,6,6)
@@ -152,6 +154,17 @@ class troop extends physical{
                 this.layer.rect(10,-30+weapon.recoil.value[0],3,8)
                 this.layer.rect(14,-30+weapon.recoil.value[1],3,8)
             break
+            case 4:
+                this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
+                this.layer.ellipse(12,-15-weapon.recoil.value[0],15,15)
+            break
+            case 5:
+                this.layer.fill(150,90,30,this.fade)
+                this.layer.quad(10,-15-weapon.recoil.value[0],14,-15-weapon.recoil.value[0],15,-45-weapon.recoil.value[0],9,-45-weapon.recoil.value[0])
+                this.layer.arc(12,-45-weapon.recoil.value[0],6,6,-180,0)
+                this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
+                this.layer.ellipse(12,-15-weapon.recoil.value[0],15,15)
+            break
         }
     }
     displaySecondary(weapon,key){
@@ -165,6 +178,18 @@ class troop extends physical{
                 this.layer.noStroke()
                 this.layer.fill(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
                 this.layer.ellipse(-12,-15+weapon.recoil.value[0],4,4)
+            break
+            case 2:
+                this.layer.fill(80,this.fade)
+                this.layer.ellipse(-12,-15+weapon.recoil.value[0],8,8)
+            break
+            case 3:
+                this.layer.fill(200,180,160,this.fade)
+                this.layer.ellipse(-12,-15+weapon.recoil.value[0],9,9)
+                this.layer.stroke(150,50,50,this.fade)
+                this.layer.strokeWeight(1)
+                this.layer.arc(-15.5,-15+weapon.recoil.value[0],3.5,6,-90,90)
+                this.layer.arc(-8.5,-15+weapon.recoil.value[0],3.5,6,90,270)
             break
         }
     }

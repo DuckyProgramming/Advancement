@@ -5,25 +5,49 @@ types={
             damage:25,speed:15,size:4,time:120,
             trigger:{hit:true,destruct:false,physics:{resistance:false}},
             splash:{damage:0,range:0,class:0},
-            image:1,
+            image:1,particle:1,
         },{
             name:'Light Beam',
             damage:15,speed:12,size:3,time:120,
             trigger:{hit:true,destruct:false,physics:{resistance:false}},
             splash:{damage:0,range:0,class:0},
-            image:1,
+            image:1,particle:1,
         },{
             name:'Pellet Beam',
             damage:5,speed:18,size:2,time:120,
             trigger:{hit:true,destruct:false,physics:{resistance:false}},
             splash:{damage:0,range:0,class:0},
-            image:2,
+            image:2,particle:1,
         },{
             name:'Grenade',
             damage:100,speed:10,size:5,time:90,
             trigger:{hit:false,destruct:true,physics:{resistance:true}},
             splash:{damage:1,range:150,class:0},
-            image:3,
+            image:3,particle:1,
+        },{
+            name:'Punch',
+            damage:10,speed:0,size:10,time:15,
+            trigger:{hit:true,destruct:false,physics:{resistance:false}},
+            splash:{damage:0,range:0,class:0},
+            image:0,particle:0,
+        },{
+            name:'Bat',
+            damage:30,speed:0,size:20,time:15,
+            trigger:{hit:true,destruct:false,physics:{resistance:false}},
+            splash:{damage:0,range:0,class:0},
+            image:0,particle:0,
+        },{
+            name:'Rock',
+            damage:10,speed:5,size:3,time:90,
+            trigger:{hit:true,destruct:false,physics:{resistance:false}},
+            splash:{damage:0,range:0,class:0},
+            image:4,particle:0,
+        },{
+            name:'Baseball',
+            damage:30,speed:9,size:4,time:120,
+            trigger:{hit:true,destruct:false,physics:{resistance:false}},
+            splash:{damage:0,range:0,class:0},
+            image:5,particle:0,
         },
     ],troop:[
         {
@@ -62,12 +86,12 @@ types={
             recoil:{loop:2,anim:2,speed:1,return:0.25},
         },{
             name:'Fists',
-            reload:[0],projectile:4,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
-            recoil:{loop:0,anim:0,speed:0,return:0},
+            reload:[30],projectile:4,spread:0,spawn:{x:12,y:-15},range:[30,25],speed:0.95,
+            recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Bat',
-            reload:[0],projectile:5,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
-            recoil:{loop:0,anim:0,speed:0,return:0},
+            reload:[30],projectile:5,spread:0,spawn:{x:12,y:-45},range:[0,0],speed:1,
+            recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },
     ],secondary:[
         {
@@ -80,12 +104,28 @@ types={
             recoil:{loop:1,anim:6,speed:2,return:0.1},
         },{
             name:'Rock Throw',
-            reload:[0],projectile:6,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
-            recoil:{loop:0,anim:0,speed:0,return:0},
+            reload:[120],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
+            recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Throw',
-            reload:[0],projectile:7,spread:0,spawn:{x:0,y:0},range:[0,0],speed:1,
-            recoil:{loop:0,anim:0,speed:0,return:0},
+            reload:[120],projectile:7,spread:3,spawn:{x:-12,y:-6},range:[400,250],speed:0.85,
+            recoil:{loop:1,anim:10,speed:0.5,return:0.5},
+        },
+    ],passive:[
+        {
+            name:'Unarmed',
+            speed:1,
+        },{
+            name:'Quick Shield',
+            speed:0.95,
+        },
+    ],body:[
+        {
+            name:'Human',
+            color:[230,210,140],
+        },{
+            name:'Duck',
+            color:[255,235,35],
         },
     ],team:[
         {
@@ -99,7 +139,7 @@ types={
 }
 dev={mark:true}
 stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level',background:0}
-game={level:0,zone:0,mission:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
+game={level:0,zone:0,mission:2,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene}

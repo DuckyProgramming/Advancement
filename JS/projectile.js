@@ -10,6 +10,7 @@ class projectile extends entity{
         this.size=types.projectile[this.type].size
         this.time=types.projectile[this.type].time
         this.image=types.projectile[this.type].image
+        this.particle=types.projectile[this.type].particle
         this.trigger=types.projectile[this.type].trigger
         this.splash=types.projectile[this.type].splash
         this.collide={list:[entities.troops]}
@@ -45,6 +46,20 @@ class projectile extends entity{
                     this.layer.noStroke()
                     this.layer.fill(this.color[0][0],this.color[0][1],this.color[0][2],this.fade)
                     this.layer.ellipse(0,0,8,8)
+                break
+                case 4:
+                    this.layer.fill(80,this.fade)
+                    this.layer.ellipse(0,0,30,30)
+                break
+                case 5:
+                    this.layer.fill(200,180,160,this.fade)
+                    this.layer.ellipse(0,0,30,30)
+                    this.layer.rotate(this.time*5)
+                    this.layer.stroke(150,50,50,this.fade)
+                    this.layer.strokeWeight(4)
+                    this.layer.arc(-12,0,12,20,-90,90)
+                    this.layer.arc(12,0,12,20,90,270)
+                    this.layer.rotate(this.time*-5)
                 break
             }
             this.layer.scale(10/this.size/this.scale)
@@ -104,16 +119,20 @@ class projectile extends entity{
                 }
             }
         }
-        this.particle(context)
+        this.burst(context)
     }
-    particle(context){
-        switch(context){
-            case 0:
-                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
-            break
+    burst(context){
+        switch(this.particle){
             case 1:
-                if(this.splash.damage>0){
-                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
+                switch(context){
+                    case 0:
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
+                    break
+                    case 1:
+                        if(this.splash.damage>0){
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,0,0,sqrt(this.damage)*10*this.boost.particle,5,this.color))
+                        }
+                    break
                 }
             break
         }
