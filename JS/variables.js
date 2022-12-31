@@ -146,6 +146,7 @@ transition={trigger:false,anim:0,scene:stage.scene}
 inputs={press:false,mouse:{x:0,y:0},screen:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false],[false]]}
 entities={projectiles:[],walls:[],troops:[],particles:[]}
 collision={incident:{x:0,y:0},calculate:{x:0,y:0}}
+dialogue={stack:[],talking:[],timer:0,fade:0}
 calc={int:[0,0]}
 run={fore:[],info:[]}
 a=0;b=0;c=0;d=0;_=0

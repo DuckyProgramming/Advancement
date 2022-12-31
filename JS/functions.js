@@ -23,6 +23,35 @@ function displayTransition(layer,transition){
 		transition.anim=round(transition.anim*10-1)/10
 	}
 }
+function displayDialogue(layer,dialogue){
+	layer.stroke(180,180,240,dialogue.fade)
+	layer.strokeWeight(5)
+	layer.fill(150,150,200,dialogue.fade)
+	layer.rect(layer.width/2-200,layer.height-105,400,80,5)
+	layer.rect(layer.width/2-75,layer.height-155,150,40,5)
+	layer.fill(0,dialogue.fade)
+	layer.noStroke()
+	layer.textSize(15)
+	if(dialogue.stack.length>0){
+		layer.text(dialogue.stack[0],layer.width/2,layer.height-65)
+		layer.text(dialogue.talking[0],layer.width/2,layer.height-135)
+	}
+	if(dialogue.fade<255&&dialogue.timer>0){
+		dialogue.fade+=17
+	}else if(dialogue.fade>0&&dialogue.timer<=0){
+		dialogue.fade-=17
+	}
+	if(dialogue.timer>0){
+		dialogue.timer-=2/3
+	}
+	else if(dialogue.stack.length>1){
+		if(dialogue.stack.length>1){
+			dialogue.timer=120
+			dialogue.stack.splice(0,1)
+			dialogue.talking.splice(0,1)
+		}
+	}
+}
 function regTriangle(layer,x,y,radius,direction){
 	layer.triangle(x+sin(direction)*radius,y+cos(direction)*radius,x+sin(direction+120)*radius,y+cos(direction+120)*radius,x+sin(direction+240)*radius,y+cos(direction+240)*radius);
 }
