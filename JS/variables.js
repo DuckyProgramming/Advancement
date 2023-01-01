@@ -86,7 +86,7 @@ types={
             recoil:{loop:2,anim:2,speed:1,return:0.25},
         },{
             name:'Fists',
-            reload:[30],projectile:4,spread:0,spawn:{x:12,y:-15},range:[30,25],speed:0.95,
+            reload:[30],projectile:4,spread:0,spawn:{x:12,y:-15},range:[20,15],speed:0.95,
             recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Bat',
@@ -104,7 +104,7 @@ types={
             recoil:{loop:1,anim:6,speed:2,return:0.1},
         },{
             name:'Rock Throw',
-            reload:[120],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
+            reload:[12],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
             recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Throw',
@@ -138,11 +138,11 @@ types={
     ]
 }
 dev={mark:true}
-stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level',background:0}
-game={level:0,zone:0,mission:2,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:40}
+stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level'}
+game={level:0,zone:0,mission:2,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:80,timer:0,background:0,end:false}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
-transition={trigger:false,anim:0,scene:stage.scene}
+transition={trigger:false,anim:0,scene:stage.scene,mission:game.mission}
 inputs={press:false,mouse:{x:0,y:0},screen:{x:0,y:0},rel:{x:0,y:0},keys:[[false,false,false,false],[false,false,false,false],[false]]}
 entities={projectiles:[],walls:[],troops:[],particles:[]}
 collision={incident:{x:0,y:0},calculate:{x:0,y:0}}

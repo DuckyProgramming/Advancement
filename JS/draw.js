@@ -2,14 +2,17 @@ function draw(){
 	clear()
 	background(125)
 	graphics.main.clear()
-	graphics.main.push()
 	switch(stage.scene){
 		case 'level':
-			switch(stage.background){
+			switch(game.background){
 				case 0:
 					graphics.main.background(120)
 				break
+				case 1:
+					graphics.main.background(200,190,180)
+				break
 			}
+			graphics.main.push()
 			graphics.main.translate(graphics.main.width/2,graphics.main.height/2)
 			graphics.main.scale(stage.focus.scale)
 			graphics.main.translate(-stage.focus.x,-stage.focus.y)
@@ -29,10 +32,11 @@ function draw(){
 					run.info[a][b].displayInfo()
 				}
 			}
-			progression(stage.mission)
+			displayBorder(graphics.main,game.edge)
+			graphics.main.pop()
+			progression(game.mission)
 		break
 	}
-	graphics.main.pop()
 	displayDialogue(graphics.main,dialogue)
 	displayTransition(graphics.main,transition)
 	stage.scale=min(width/graphics.main.width,height/graphics.main.height)

@@ -8,8 +8,12 @@ class wall extends physical{
 		this.layer.noStroke()
 		switch(this.type){
 			case 1:
-				this.layer.fill(200,this.fade)
-				this.layer.rect(0,0,this.width,this.height)
+				this.layer.fill(80,this.fade)
+				this.layer.rect(0,0,this.width+2,this.height+2)
+			break
+			case 2:
+				this.layer.fill(120,110,100,this.fade)
+				this.layer.rect(0,0,this.width+2,this.height+2)
 			break
 		}
 		this.layer.translate(-this.position.x,-this.position.y)

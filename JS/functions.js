@@ -5,6 +5,21 @@ function setupLayer(layer){
 	layer.colorMode(RGB,255,255,255,1)
 	layer.noStroke()
 }
+function displayBorder(layer,edge){
+	layer.noStroke()
+	layer.fill(0)
+	layer.rect(edge.x/2,-layer.height,layer.width*3+edge.x,layer.height*2)
+	layer.rect(edge.x/2,layer.height+edge.y,layer.width*3+edge.x,layer.height*2)
+	layer.rect(-layer.width,edge.y/2,layer.width*2,edge.y)
+	layer.rect(layer.width+edge.x,edge.y/2,layer.width*2,edge.y)
+	for(let a=0;a<5;a++){
+		layer.fill(0,0.85-a*0.15)
+		layer.rect(4+a*8,edge.y/2,8,edge.y-a*16)
+		layer.rect(edge.x-4-a*8,edge.y/2,8,edge.y-a*16)
+		layer.rect(edge.x/2,4+a*8,edge.x-16-a*16,8)
+		layer.rect(edge.x/2,edge.y-4-a*8,edge.x-16-a*16,8)
+	}
+}
 function displayTransition(layer,transition){
 	layer.noStroke()
 	layer.fill(0)
@@ -17,6 +32,13 @@ function displayTransition(layer,transition){
 		if(transition.anim>1.1){
 			transition.trigger = false
 			stage.scene=transition.scene
+			game.mission=transition.mission
+			if(transition.scene=='level'){
+				game.level=missions[game.mission].level
+				game.zone=missions[game.mission].zone
+				resetWorld()
+				generateWorld(graphics.main,levels[game.level][game.zone])
+			}
 		}
 	}
 	else if(transition.anim>0){
@@ -27,8 +49,8 @@ function displayDialogue(layer,dialogue){
 	layer.stroke(180,180,240,dialogue.fade)
 	layer.strokeWeight(5)
 	layer.fill(150,150,200,dialogue.fade)
-	layer.rect(layer.width/2-200,layer.height-105,400,80,5)
-	layer.rect(layer.width/2-75,layer.height-155,150,40,5)
+	layer.rect(layer.width/2,layer.height-65,400,80,5)
+	layer.rect(layer.width/2,layer.height-135,150,40,5)
 	layer.fill(0,dialogue.fade)
 	layer.noStroke()
 	layer.textSize(15)
@@ -178,12 +200,20 @@ function updateMouse(layer){
 	inputs.rel.x=(inputs.screen.x-layer.width/2)/stage.focus.scale+stage.focus.x
 	inputs.rel.y=(inputs.screen.y-layer.height/2)/stage.focus.scale+stage.focus.y
 }
+function resetWorld(){
+	entities.projectiles=[]
+	entities.walls=[]
+	entities.troops=[]
+	entities.particles=[]
+	run={fore:[entities.projectiles,entities.walls,entities.troops,entities.particles],info:[entities.troops]}
+}
 function generateWorld(layer,level){
 	if(level.length>0&&level[0].length>0){
 		game.edge.x=level[0].length*game.tileSize
 		game.edge.y=level.length*game.tileSize
 		game.player.team=missions[game.mission].player.team
 		game.player.alive=false
+		game.background=missions[game.mission].background
 		for(let a=0,la=level.length;a<la;a++){
 			for(let b=0,lb=level[a].length;b<lb;b++){
 				if(level[a][b]>=100){
