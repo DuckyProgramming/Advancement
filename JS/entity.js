@@ -15,6 +15,10 @@ class entity{
             this.fade=round(this.fade*5+1)/5
         }else if(this.status==1&&this.fade>0){
             this.fade=round(this.fade*5-1)/5
+        }else if(this.status==2&&this.fade<0.8){
+            this.fade=round(this.fade*5+1)/5
+        }else if(this.status==3&&this.fade>0.2){
+            this.fade=round(this.fade*5-1)/5
         }
         this.position.x+=this.velocity.x
         this.position.y+=this.velocity.y

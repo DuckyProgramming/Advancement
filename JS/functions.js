@@ -209,6 +209,8 @@ function resetWorld(){
 }
 function generateWorld(layer,level){
 	if(level.length>0&&level[0].length>0){
+		game.timer=0
+		game.progress=0
 		game.edge.x=level[0].length*game.tileSize
 		game.edge.y=level.length*game.tileSize
 		game.player.team=missions[game.mission].player.team

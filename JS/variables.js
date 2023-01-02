@@ -52,20 +52,24 @@ types={
     ],troop:[
         {
             name:'None',
-            life:100,heal:120,speed:3,size:15,turnSpeed:10,
+            life:100,heal:120,speed:2,size:15,turnSpeed:10,
             timer:{life:600},
         },{
             name:'Basic',
-            life:120,heal:90,speed:2,size:15,turnSpeed:6, 
+            life:120,heal:90,speed:1.5,size:15,turnSpeed:6, 
             timer:{life:480},
         },{
             name:'Standard',
-            life:160,heal:105,speed:1.5,size:15,turnSpeed:5,
+            life:160,heal:105,speed:1.25,size:15,turnSpeed:5,
             timer:{life:540},
         },{
             name:'Heavy',
-            life:240,heal:150,speed:1.25,size:15,turnSpeed:4,
+            life:240,heal:150,speed:1,size:15,turnSpeed:4,
             timer:{life:720},
+        },{
+            name:'Gang',
+            life:100,heal:150,speed:2.25,size:15,turnSpeed:10,
+            timer:{life:480},
         },
     ],primary:[
         {
@@ -104,7 +108,7 @@ types={
             recoil:{loop:1,anim:6,speed:2,return:0.1},
         },{
             name:'Rock Throw',
-            reload:[12],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
+            reload:[2],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
             recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Throw',
@@ -134,12 +138,18 @@ types={
         },{
             color:[[50,50,255],[100,100,255]],
             life:1,speed:1,
+        },{
+            color:[[255,50,50],[255,100,100]],
+            life:1,speed:1,
+        },{
+            color:[[255,255,50],[255,255,100]],
+            life:1,speed:1,
         },
     ]
 }
 dev={mark:true}
 stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level'}
-game={level:0,zone:0,mission:2,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:80,timer:0,background:0,end:false}
+game={level:0,zone:0,mission:2,progress:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:80,timer:0,background:0,end:false}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene,mission:game.mission}

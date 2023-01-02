@@ -24,21 +24,21 @@ missions=[
             {
                 position:{x:60,y:60},group:[
                     {type:0,primary:0,secondary:0,passive:0,body:0,direction:0,team:1,number:0}
-                ]
+                ],
             },
         ]
     },{
-        name:'Fistfight',
+        name:'Gangfight',
         background:1,level:1,zone:0,
-        player:{type:0,primary:4,secondary:2,passive:0,body:1,direction:0,team:0,name:['Duckipo']},
+        player:{type:4,primary:4,secondary:2,passive:0,body:1,direction:0,team:2,name:['Duckipo']},
         ally:[
-            {type:0,primary:4,secondary:2,passive:0,body:1,direction:0,team:0,number:1,name:['Dippy']}
+            {type:4,primary:4,secondary:2,passive:0,body:1,direction:0,team:2,number:2,name:['Dippy','Dukep']}
         ],
         other:[
             {
                 position:{x:440,y:160},group:[
-                    {type:0,primary:4,secondary:0,passive:0,body:0,direction:180,team:1,number:2}
-                ]
+                    {type:4,primary:4,secondary:0,passive:0,body:1,direction:180,team:3,number:2}
+                ],
             },
         ]
     },{
@@ -52,7 +52,7 @@ missions=[
             {
                 position:{x:60,y:60},group:[
                     {type:1,primary:1,secondary:0,passive:0,body:0,direction:0,team:1,number:3}
-                ]
+                ],
             },
         ]
     },{
@@ -66,7 +66,7 @@ missions=[
             {
                 position:{x:60,y:60},group:[
                     {type:0,primary:0,secondary:0,passive:0,body:0,direction:0,team:1,number:1}
-                ]
+                ],
             },
         ]
     },

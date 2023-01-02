@@ -22,6 +22,10 @@ class troop extends physical{
         this.secondary={firing:false,recoil:{timer:[],value:[]},counter:{fire:0}}
         
         this.life=types.troop[this.type].life
+        
+        this.setupStats()
+    }
+    setupStats(){
         this.heal=types.troop[this.type].heal
         this.speed=types.troop[this.type].speed
         this.turnSpeed=types.troop[this.type].turnSpeed
@@ -67,11 +71,11 @@ class troop extends physical{
             break
         }
 
-        for(a=0;a<this.primary.recoilSet.loop;a++){
+        for(let a=0;a<this.primary.recoilSet.loop;a++){
             this.primary.recoil.timer.push(0)
             this.primary.recoil.value.push(0)
         }
-        for(a=0;a<this.secondary.recoilSet.loop;a++){
+        for(let a=0;a<this.secondary.recoilSet.loop;a++){
             this.secondary.recoil.timer.push(0)
             this.secondary.recoil.value.push(0)
         }
@@ -134,6 +138,13 @@ class troop extends physical{
                 this.layer.arc(0,0,48,48,0,180)
                 this.layer.arc(0,1,48,12,-180,0)
             break
+            case 4:
+                this.layer.fill(this.color[0][0]*0.8,this.color[0][1]*0.8,this.color[0][2]*0.8,this.fade)
+                this.layer.stroke(this.color[0][0]*0.8,this.color[0][1]*0.8,this.color[0][2]*0.8,this.fade)
+                this.layer.strokeWeight(4)
+                this.layer.arc(0,0,44,44,0,180)
+                this.layer.line(-32,0,22,0)
+            break
         }
     }
     displayPrimary(weapon,key){
@@ -156,14 +167,14 @@ class troop extends physical{
             break
             case 4:
                 this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
-                this.layer.ellipse(12,-15-weapon.recoil.value[0],15,15)
+                this.layer.ellipse(12,-15-weapon.recoil.value[0]*2,15,15)
             break
             case 5:
                 this.layer.fill(150,90,30,this.fade)
-                this.layer.quad(10,-15-weapon.recoil.value[0],14,-15-weapon.recoil.value[0],15,-45-weapon.recoil.value[0],9,-45-weapon.recoil.value[0])
-                this.layer.arc(12,-45-weapon.recoil.value[0],6,6,-180,0)
+                this.layer.quad(10,-15-weapon.recoil.value[0]*2,14,-15-weapon.recoil.value[0]*2,15,-45-weapon.recoil.value[0]*2,9,-45-weapon.recoil.value[0]*2)
+                this.layer.arc(12,-45-weapon.recoil.value[0]*2,6,6,-180,0)
                 this.layer.fill(this.baseColor[0],this.baseColor[1],this.baseColor[2],this.fade)
-                this.layer.ellipse(12,-15-weapon.recoil.value[0],15,15)
+                this.layer.ellipse(12,-15-weapon.recoil.value[0]*2,15,15)
             break
         }
     }
@@ -243,9 +254,13 @@ class troop extends physical{
     update(){
         super.update()
         if(this.life<=0){
-            this.status=1
-            if(this.life<=0&&this.team!=game.player.team){
-                this.remove=true
+            if(this.team==game.player.team){
+                this.status=3
+            }else{
+                this.status=1
+                if(this.fade<=0){
+                    this.remove=true
+                }
             }
         }else{
             this.life=min(this.life,this.base.life)
@@ -362,6 +377,8 @@ class troop extends physical{
                     if(this.calc.dist==600){
                         this.goal.position.x=stage.focus.x
                         this.goal.position.y=stage.focus.y
+                        this.primary.firing=false
+                        this.secondary.firing=false
                     }else{
                         for(let a=0,la=entities.troops.length;a<la;a++){
                             if(dist(this.position.x,this.position.y,entities.troops[a].position.x,entities.troops[a].position.y)==this.calc.dist){
@@ -384,7 +401,7 @@ class troop extends physical{
                             this.tick[a]=0
                         }
                     }
-                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>100+this.hold.int[0]){
+                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>100+this.hold.int[0]&&this.calc.dist==600||(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]+this.hold.int[0]||dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]&&this.primary.range[1]<50)&&this.calc.dist<600){
                         if(this.position.x>stage.focus.x+10||this.tick[0]==1){
                             this.velocity.x-=this.speed/10
                         }
