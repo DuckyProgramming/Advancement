@@ -149,7 +149,7 @@ types={
 }
 dev={mark:true}
 stage={scale:0,focus:{x:0,y:0,scale:1},scene:'level'}
-game={level:0,zone:0,mission:2,progress:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:80,timer:0,background:0,end:false}
+game={level:0,zone:0,mission:1,progress:0,edge:{x:0,y:0},player:{team:0,alive:false},tileSize:80,timer:0,background:0,end:false}
 physics={resistance:0.05,friction:0.025}
 graphics={main:0,backgrounds:[],minor:[]}
 transition={trigger:false,anim:0,scene:stage.scene,mission:game.mission}

@@ -33,7 +33,11 @@ missions=[
                 ],
             },
         ]
-    },{
+    },
+    
+    
+    
+    /*{
         name:'Ordinary Routine',
         background:0,level:0,zone:0,
         player:{type:1,primary:1,secondary:0,passive:1,body:1,direction:0,team:0,name:['Duckipo']},
@@ -61,5 +65,5 @@ missions=[
                 ],
             },
         ]
-    },
+    },*/
 ]
