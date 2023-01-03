@@ -66,7 +66,7 @@ function displayDialogue(layer,dialogue){
 	if(dialogue.timer>0){
 		dialogue.timer-=2/3
 	}
-	else if(dialogue.stack.length>1){
+	if(dialogue.timer<=0&&dialogue.stack.length>1){
 		if(dialogue.stack.length>1){
 			dialogue.timer=120
 			dialogue.stack.splice(0,1)
@@ -91,6 +91,11 @@ function sign(value){
 function toggle(bool){
 	if(bool){return false}
 	else{return true}
+}
+function triggerEnemies(){
+	for(let a=0,la=entities.troops.length;a<la;a++){
+		entities.troops[a].trigger.movement.active=true
+	}
 }
 function pointInsideBox(point,box){
 	if(point.position.x>box.position.x-box.width/2&&point.position.x<box.position.x+box.width/2&&point.position.y>box.position.y-box.height/2&&point.position.y<box.position.y+box.height/2){

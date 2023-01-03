@@ -15,7 +15,7 @@ class troop extends physical{
         this.trigger={physics:{resistance:true,friction:true},movement:{active:false}}
         this.calc={damage:0,dist:0}
         this.hold={int:[random(0,100)]}
-        this.tick=[0,0,0,0]
+        this.tick=[0,0,0,0,0]
 		this.timers=[]
         this.scale=1
         this.mode=0
@@ -420,7 +420,7 @@ class troop extends physical{
                         if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.primary.range[0]){
                             this.primary.firing=true
                         }
-                        if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.secondary.range[0]){
+                        if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.secondary.range[0]&&(this.base.primary.reload[0]==0||this.tick[4]==1)){
                             this.secondary.firing=true
                         }
                     }
@@ -432,7 +432,20 @@ class troop extends physical{
                             this.tick[a]=0
                         }
                     }
-                    if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>100+this.hold.int[0]&&this.calc.dist==600||(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]+this.hold.int[0]||dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]&&this.primary.range[1]<50)&&this.calc.dist<600||this.mode==0){
+                    if(this.mode==0){
+                        if(this.position.x>this.goal.position.x+10||this.tick[0]==1){
+                            this.velocity.x-=this.speed/10
+                        }
+                        if(this.position.x<this.goal.position.x-10||this.tick[1]==1){
+                            this.velocity.x+=this.speed/10
+                        }
+                        if(this.position.y>this.goal.position.y+10||this.tick[2]==1){
+                            this.velocity.y-=this.speed/10
+                        }
+                        if(this.position.y<this.goal.position.y-10||this.tick[3]==1){
+                            this.velocity.y+=this.speed/10
+                        }
+                    }else if(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>100+this.hold.int[0]&&this.calc.dist==600||(dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]+this.hold.int[0]||dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]&&this.primary.range[1]<50)&&this.calc.dist<600){
                         if(this.position.x>stage.focus.x+10||this.tick[0]==1){
                             this.velocity.x-=this.speed/10
                         }
@@ -474,20 +487,20 @@ class troop extends physical{
                     if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.primary.range[0]){
                         this.primary.firing=true
                     }
-                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.secondary.range[0]){
+                    if(this.trigger.movement.active&&dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)<this.secondary.range[0]&&(this.base.primary.reload[0]==0||this.tick[4]==1)){
                         this.secondary.firing=true
                     }
                     if((dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]+this.hold.int[0]||dist(this.position.x,this.position.y,this.goal.position.x,this.goal.position.y)>this.primary.range[1]&&this.primary.range[1]<50)&&this.trigger.movement.active){
-                        if(this.position.x>stage.focus.x+10||this.tick[0]==1){
+                        if(this.position.x>this.goal.position.x+10||this.tick[0]==1){
                             this.velocity.x-=this.speed/10
                         }
-                        if(this.position.x<stage.focus.x-10||this.tick[1]==1){
+                        if(this.position.x<this.goal.position.x-10||this.tick[1]==1){
                             this.velocity.x+=this.speed/10
                         }
-                        if(this.position.y>stage.focus.y+10||this.tick[2]==1){
+                        if(this.position.y>this.goal.position.y+10||this.tick[2]==1){
                             this.velocity.y-=this.speed/10
                         }
-                        if(this.position.y<stage.focus.y-10||this.tick[3]==1){
+                        if(this.position.y<this.goal.position.y-10||this.tick[3]==1){
                             this.velocity.y+=this.speed/10
                         }
                     }else if(this.trigger.movement.active){
