@@ -52,24 +52,24 @@ types={
     ],troop:[
         {
             name:'None',
-            life:100,heal:120,speed:2,size:15,turnSpeed:10,
-            timer:{life:600},
+            life:100,heal:240,speed:2,size:15,turnSpeed:10,
+            timer:{life:300},
         },{
             name:'Basic',
-            life:120,heal:90,speed:1.5,size:15,turnSpeed:6, 
-            timer:{life:480},
+            life:120,heal:180,speed:1.5,size:15,turnSpeed:6, 
+            timer:{life:240},
         },{
             name:'Standard',
-            life:160,heal:105,speed:1.25,size:15,turnSpeed:5,
-            timer:{life:540},
+            life:160,heal:210,speed:1.25,size:15,turnSpeed:5,
+            timer:{life:270},
         },{
             name:'Heavy',
-            life:240,heal:150,speed:1,size:15,turnSpeed:4,
-            timer:{life:720},
+            life:240,heal:300,speed:1,size:15,turnSpeed:4,
+            timer:{life:360},
         },{
             name:'Gang',
-            life:100,heal:150,speed:2.25,size:15,turnSpeed:10,
-            timer:{life:480},
+            life:100,heal:270,speed:2.25,size:15,turnSpeed:10,
+            timer:{life:240},
         },
     ],primary:[
         {
@@ -108,7 +108,7 @@ types={
             recoil:{loop:1,anim:6,speed:2,return:0.1},
         },{
             name:'Rock Throw',
-            reload:[2],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
+            reload:[120],projectile:6,spread:5,spawn:{x:-12,y:-6},range:[300,150],speed:0.9,
             recoil:{loop:1,anim:10,speed:0.5,return:0.5},
         },{
             name:'Baseball Throw',
